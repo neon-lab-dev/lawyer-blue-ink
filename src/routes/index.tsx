@@ -3,8 +3,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ROUTES from "./routes";
 
 import type { JSX } from "react";
-import AppLayout from "@/components/AppLayout";
-import AppLoading from "@/components/AppLoading";
+import AppLayout from "@/components/ui/AppLayout";
+import AppLoading from "@/components/ui/AppLoading";
 
 const RoutesContainer = (): JSX.Element => {
   return (
