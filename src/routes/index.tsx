@@ -15,7 +15,9 @@ const RoutesContainer = (): JSX.Element => {
             <Route
               key={index}
               element={
+                // Wrap the component in the AppLayout ie Header, Footer, Sidebar etc
                 <AppLayout>
+                  {/* // Suspense for lazy loading components */}
                   <Suspense fallback={<AppLoading />}>
                     <Component />
                   </Suspense>

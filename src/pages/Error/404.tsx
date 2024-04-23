@@ -1,5 +1,8 @@
 import { Link } from "react-router-dom";
 
+/**
+ * @description 404 page ie when a page is not found
+ */
 const Error404 = () => {
   return (
     <div className="flex h-full flex-col justify-center items-center p-2 w-full ">
