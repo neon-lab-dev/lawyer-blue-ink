@@ -1,5 +1,9 @@
 import warning from "@/assets/images/warning.jpg";
 
+/**
+ *  NotSupported component is used to display a message when the user tries to access the website from a device that is not supported.
+ * ie mobile or some small screen devices
+ */
 const NotSupported = () => {
   return (
     <div className="flex flex-col justify-center items-center h-screen p-2 w-full m-auto">

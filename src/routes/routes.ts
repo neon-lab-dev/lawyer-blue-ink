@@ -5,7 +5,9 @@ import type { RouteProps } from "react-router-dom";
 type IRoute = RouteProps & {
   component: LazyExoticComponent<ComponentType<any>>;
 };
-
+/**
+ * @description All the routes for the application
+ */
 const ROUTES: IRoute[] = [
   {
     path: "/",
