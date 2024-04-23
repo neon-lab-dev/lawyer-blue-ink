@@ -8,6 +8,10 @@ export default {
         secondary: "#F3F2FF",
       },
     },
+    fontFamily: {
+      "work-sans": ["Work Sans", "sans-serif"],
+      lato: ["Lato", "sans-serif"],
+    },
   },
   plugins: [],
 };
