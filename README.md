@@ -5,6 +5,7 @@ This project is created using Vite.js, React.js, and Tailwind CSS.
 # Deployment Links
 
 - [Master](https://lawyer-blue-ink.vercel.app/)
+- [Develop](https://lawyer-blue-ink-git-develop-neon-lab-devs-projects.vercel.app/)
 
 ## Local Setup
 
