@@ -5,7 +5,15 @@ export default {
     extend: {
       colors: {
         primary: "#17124A",
-        secondary: "#F3F2FF",
+        "tab-container": "#EBEBFF",
+        "button-container": "#F3F2FF",
+        success: "#52C21D",
+        error: "#E83535",
+        "tab-activation": "#0098EA",
+        background: "#FFFFFF",
+        header: "#F0F0F0",
+        "table-header": "#F3F3F3",
+        text: "#000000",
       },
     },
     fontFamily: {

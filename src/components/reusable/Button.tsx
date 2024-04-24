@@ -8,8 +8,8 @@ const classes = {
   default: "rounded-[4px] font-[600]",
   variants: {
     primary: "bg-primary text-white px-[32px] py-[16px]",
-    outline: "border-primary border-[3px] text-primary px-[32px] py-[16px]",
-    secondary: "px-[16px] py-[8px] bg-secondary text-primary",
+    secondary: "border-primary border-[3px] text-primary px-[32px] py-[16px]",
+    supportive: "px-[16px] py-[8px] bg-button-container text-primary",
   },
 } as const;
 
