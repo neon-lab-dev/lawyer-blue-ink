@@ -10,7 +10,7 @@ const AppSidebar = () => {
   const navLinks = [
     {
       label: "Upload Template",
-      path: "/login",
+      path: "/",
       icon : upload,
     },
     {
