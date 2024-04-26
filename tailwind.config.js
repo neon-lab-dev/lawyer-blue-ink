@@ -14,6 +14,7 @@ export default {
         header: "#F0F0F0",
         "table-header": "#F3F3F3",
         text: "#000000",
+        gray: "#69686A",
       },
     },
     fontFamily: {
