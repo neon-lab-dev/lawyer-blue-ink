@@ -1,0 +1,13 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="mail_lock">
+<mask id="mask0_1_521" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="24" height="24">
+<rect id="Bounding box" width="24" height="24" fill="#D9D9D9"/>
+</mask>
+<g mask="url(#mask0_1_521)">
+<path id="mail_lock_2" d="M4 20C3.45 20 2.97917 19.8042 2.5875 19.4125C2.19583 19.0208 2 18.55 2 18V6C2 5.45 2.19583 4.97917 2.5875 4.5875C2.97917 4.19583 3.45 4 4 4H20C20.55 4 21.0208 4.19583 21.4125 4.5875C21.8042 4.97917 22 5.45 22 6V9.975H20V8L12 13L4 8V18H16V20H4ZM12 11L20 6H4L12 11Z" fill="#1C1B1F"/>
+<g id="send">
+<path id="send_2" d="M19.7088 20.3912L17 18L14.8946 14.7504L24.0002 11.854L19.7088 20.3912ZM19.3946 17.5336L21.3946 14.0336L17.3946 15.5336L18.0002 16.5L20.1221 15.1637L18.2946 17.0336L19.3946 17.5336Z" fill="#1C1B1F"/>
+</g>
+</g>
+</g>
+</svg>

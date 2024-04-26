@@ -11,6 +11,7 @@ export default {
         error: "#E83535",
         "tab-activation": "#0098EA",
         background: "#FFFFFF",
+        headerLeft: "#E5E5FF",
         header: "#F0F0F0",
         "table-header": "#F3F3F3",
         text: "#000000",
