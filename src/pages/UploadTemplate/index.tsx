@@ -6,12 +6,13 @@ import FilePreview from "./FileView";
 
 // Main Component
 const Home = () => {
-  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [showUploadArea, setShowUploadArea] = useState(true);
   const [isFileUploaded, setIsFileUploaded] = useState(false);
   const [templateName, setTemplateName] = useState('');
 
-  const handleFilesUpload = (files) => {
+  // Explicit type annotation for 'files'
+  const handleFilesUpload = (files: File[]) => {
     setUploadedFiles(files);
   };
 

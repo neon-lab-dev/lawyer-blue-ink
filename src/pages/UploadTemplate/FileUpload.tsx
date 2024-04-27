@@ -2,8 +2,13 @@ import { useDropzone } from 'react-dropzone';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import uploadIcon from "@/assets/images/cloud_upload.svg";
 
-// FileDrop Component
-const FileDrop = ({ onFilesUpload }) => {
+// Define the prop type for FileDrop
+interface FileDropProps {
+    onFilesUpload: (files: File[]) => void;
+}
+
+// FileDrop Component with TypeScript typings
+const FileDrop = ({ onFilesUpload }: FileDropProps) => {
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         accept: {
             'application/pdf': ['.pdf'],
@@ -56,6 +61,4 @@ const FileDrop = ({ onFilesUpload }) => {
     );
 };
 
-
-export default FileDrop
-
+export default FileDrop;

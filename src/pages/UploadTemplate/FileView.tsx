@@ -1,15 +1,23 @@
 import Button from "@/components/reusable/Button";
 import { Worker, Viewer } from '@react-pdf-viewer/core';
-import arrowleft from "@/assets/images/arrow_back.svg"
+import arrowleft from "@/assets/images/arrow_back.svg";
+import { ChangeEvent } from 'react';
 
+// Define the types for the props
+interface FilePreviewProps {
+    pdfFile: File; 
+    templateName: string;
+    setTemplateName: (name: string) => void; 
+    onSaveAndUpload: () => void; 
+}
 
-// FilePreview Component
-const FilePreview = ({ pdfFile, templateName, setTemplateName, onSaveAndUpload }) => {
+// FilePreview Component with custom scrollbar and Tailwind CSS
+const FilePreview = ({ pdfFile, templateName, setTemplateName, onSaveAndUpload }: FilePreviewProps) => {
     return (
-        <div className="">
+        <div className="scrollbar-thin"> {/* Apply custom scrollbar class */}
             <div className="py-6">
-                <button className=" rounded-[50%] bg-gray-100 p-2">
-                    <img src={arrowleft} alt=""/>
+                <button className="rounded-[50%] bg-gray-100 p-2">
+                    <img src={arrowleft} alt="Back" />
                 </button>
                 <h1 className="pt-8 font-bold text-[16px]">Preview Uploaded Files</h1>
             </div>
@@ -28,8 +36,8 @@ const FilePreview = ({ pdfFile, templateName, setTemplateName, onSaveAndUpload }
                         <input
                             type="text"
                             value={templateName}
-                            placeholder="Enter to set a File Name"
-                            onChange={(e) => setTemplateName(e.target.value)}
+                            placeholder="Enter a File Name"
+                            onChange={(e: ChangeEvent<HTMLInputElement>) => setTemplateName(e.target.value)}
                             className="w-[360px] h-[16px] border-gray-800 border-5 rounded-lg p-6"
                         />
                         <div className="flex justify-end">
@@ -42,4 +50,4 @@ const FilePreview = ({ pdfFile, templateName, setTemplateName, onSaveAndUpload }
     );
 };
 
-export default FilePreview
+export default FilePreview;
