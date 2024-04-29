@@ -1,5 +1,4 @@
 import { useDropzone } from 'react-dropzone';
-import '@react-pdf-viewer/core/lib/styles/index.css';
 import uploadIcon from "@/assets/images/cloud_upload.svg";
 
 // Define the prop type for FileDrop
@@ -11,7 +10,8 @@ interface FileDropProps {
 const FileDrop = ({ onFilesUpload }: FileDropProps) => {
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         accept: {
-            'application/pdf': ['.pdf'],
+            'application/msword': ['.doc'],  // Accepts .doc files
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],  // Accepts .docx files
         },
         onDrop: (acceptedFiles) => {
             onFilesUpload(acceptedFiles);
@@ -41,7 +41,7 @@ const FileDrop = ({ onFilesUpload }: FileDropProps) => {
             <input {...getInputProps()} />
             <div className="text-center text-black">
                 {isDragActive ? (
-                    <p>Drop files here...</p>
+                    <p>Drop Word files here...</p>  // Changed the message for clarity
                 ) : (
                     <div>
                         <h1 className="text-[18px] font-work-sans font-semibold mb-4">Preview Upload File</h1>
@@ -49,7 +49,7 @@ const FileDrop = ({ onFilesUpload }: FileDropProps) => {
                             <div className='flex justify-center'>
                                 <img src={uploadIcon} alt="Upload Icon" />
                             </div>
-                            <p>Drag & drop PDF files here, or click to upload.</p>
+                            <p>Drag & drop Word files here, or click to upload.</p>  // Updated text
                             <span className='text-center text-[#0098EA] font-semibold text-[16px]'>
                                 Select a file
                             </span>
