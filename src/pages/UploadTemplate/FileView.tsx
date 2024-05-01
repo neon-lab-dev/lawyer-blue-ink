@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import DocViewer, { DocViewerRenderers } from 'react-doc-viewer';
 import Button from "@/components/reusable/Button";
 import arrowleft from "@/assets/images/arrow_back.svg";
 import { ChangeEvent } from 'react';
@@ -48,10 +47,7 @@ const FilePreview = ({ docFile, templateName, setTemplateName, onSaveAndUpload }
             <h2>Preview</h2>
             <div className="h-[300px] w-[420px] p-4 m-4">
               {docUrl ? (
-                <DocViewer
-                  documents={[{ uri: docUrl }]} 
-                  pluginRenderers={DocViewerRenderers}
-                />
+                <div></div>
               ) : (
                 <p>No file selected</p> 
               )}
