@@ -53,6 +53,7 @@ const Home = () => {
             </>
           ) : validFile ? (
             <FilePreview
+              onBack={() => setShowUploadArea(true)}
               docFile={validFile}
               templateName={templateName}
               setTemplateName={setTemplateName}

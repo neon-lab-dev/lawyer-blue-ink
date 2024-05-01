@@ -1,4 +1,4 @@
-import React, { useEffect, useState, ChangeEvent } from "react";
+import  { useEffect, useState, ChangeEvent } from "react";
 import { renderAsync } from "docx-preview";
 import Button from "@/components/reusable/Button";
 import arrowleft from "@/assets/images/arrow_back.svg";
@@ -19,7 +19,7 @@ const FilePreview = ({
   onSaveAndUpload,
   onBack,
 }: FilePreviewProps) => {
-  const [docUrl, setDocUrl] = useState<string | null>(null);
+  const [_, setDocUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
