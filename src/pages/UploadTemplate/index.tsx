@@ -8,14 +8,14 @@ const Home = () => {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [showUploadArea, setShowUploadArea] = useState(true);
   const [isFileUploaded, setIsFileUploaded] = useState(false);
-  const [templateName, setTemplateName] = useState('');
+  const [templateName, setTemplateName] = useState("");
 
   const acceptableFileTypes = [
-    'application/pdf', 
-    'application/msword', 
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 
-    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 
-    'application/vnd.ms-excel',
+    "application/pdf",
+    "application/msword",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "application/vnd.ms-excel",
   ];
 
   const handleFilesUpload = (files: File[]) => {
@@ -46,22 +46,20 @@ const Home = () => {
           {showUploadArea ? (
             <>
               <FileDrop onFilesUpload={handleFilesUpload} />
-              
+
               <div className="flex justify-end w-[850px]">
                 <Button onClick={handleProceed}>Proceed</Button>
               </div>
             </>
+          ) : validFile ? (
+            <FilePreview
+              docFile={validFile}
+              templateName={templateName}
+              setTemplateName={setTemplateName}
+              onSaveAndUpload={handleSaveAndUpload}
+            />
           ) : (
-            validFile ? (
-              <FilePreview
-                docFile={validFile}
-                templateName={templateName}
-                setTemplateName={setTemplateName}
-                onSaveAndUpload={handleSaveAndUpload}
-              />
-            ) : (
-              <p>No valid document file uploaded</p> // If no valid document is found
-            )
+            <p>No valid document file uploaded</p> // If no valid document is found
           )}
         </>
       )}
