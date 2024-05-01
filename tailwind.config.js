@@ -19,6 +19,7 @@ export default {
         "table-header": "#F3F3F3",
         text: "#000000",
         gray: "#69686A",
+        border: "#D0D0D0",
       },
       fontFamily: {
         "work-sans": ["Work Sans", "sans-serif"],
