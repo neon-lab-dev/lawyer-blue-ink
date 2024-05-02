@@ -3,12 +3,14 @@ import send from "../../assets/icons/sendwhite.svg";
 import attachFile from "../../assets/icons/attach_file.svg";
 import Modal from "@/components/reusable/Modal";
 import { useEffect, useRef, useState } from "react";
+import DocxWithReplacedText from "./DocxWithReplacedText";
 
 const SendEmailModal = ({
   isModalOpen,
   setIsModalOpen,
   setIsSentEmailModalOpen,
   activeData,
+  selectedTemplate,
 }: {
   isModalOpen: boolean;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -155,10 +157,14 @@ const SendEmailModal = ({
           </div>
         </div>
 
-        <div className="rounded border-2 border-border border-dashed p-6 bg-[#FBFBFB] w-[50%] h-[376px] overflow-y-auto flex flex-col gap-[10px]">
+        <div className="rounded border-2 border-border border-dashed p-6 bg-[#FBFBFB] w-[50%] h-[376px] overflow-y-auto scrollbar-md flex flex-col gap-[10px]">
           <h1 className="text-text text-[14px] font-work-sans font-semibold">
             Preview
           </h1>
+          <DocxWithReplacedText
+            data={dataToSent}
+            selectedTemplate={selectedTemplate}
+          />
         </div>
       </div>
     </Modal>
