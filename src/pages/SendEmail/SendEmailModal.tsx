@@ -9,12 +9,12 @@ const SendEmailModal = ({
   isModalOpen,
   setIsModalOpen,
   filePreview,
-  loading,
+  setIsSentEmailModalOpen,
 }: {
   isModalOpen: boolean;
   filePreview: File | null;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  loading: boolean;
+  setIsSentEmailModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }): JSX.Element => {
   console.log(filePreview);
 
@@ -203,9 +203,6 @@ const SendEmailModal = ({
                   <div className="h-[28px] bg-white text-text text-[14px] font-work-sans font-medium flex justify-center items-center">
                     {fileLength.length}
                   </div>
-                  {/* <div className="h-[28px] w-full px-3 py-2 bg-border flex justify-center items-center">
-                <img src={attachFile} alt="" />
-                </div> */}
 
                   <input
                     type="file"
@@ -222,7 +219,13 @@ const SendEmailModal = ({
                   />
                 </div>
 
-                <Button className="flex items-center justify-center gap-[10px] w-full">
+                <Button
+                  onClick={() => {
+                    setIsSentEmailModalOpen(true);
+                    setIsModalOpen(false);
+                  }}
+                  className="flex items-center justify-center gap-[10px] w-full"
+                >
                   <img src={send} alt="" />
                   Send Email
                 </Button>
@@ -234,11 +237,7 @@ const SendEmailModal = ({
                 Preview
               </h1>
 
-              {loading ? (
-                <p>Loading...</p>
-              ) : (
-                <>{filePreview ? <div></div> : <p>No file selected</p>}</>
-              )}
+              {filePreview ? <div></div> : <p>No file selected</p>}
             </div>
           </div>
         </div>

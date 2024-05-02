@@ -1,43 +1,53 @@
 import Button from "@/components/reusable/Button";
 import article from "@/assets/icons/article.svg";
+import React from "react";
 
-
-const UploadTemplate = () : JSX.Element => {
-    const templatesLists = [
-        {
-          _id: "AWRD456",
-          name: "Template 1",
-        },
-        {
-          _id: "AWRD456",
-          name: "Template 2",
-        },
-        {
-          _id: "AWRD456",
-          name: "Template 3",
-        },
-        {
-          _id: "AWRD456",
-          name: "Template 3",
-        },
-        {
-          _id: "AWRD456",
-          name: "Template 3",
-        },
-        {
-          _id: "AWRD456",
-          name: "Template 3",
-        },
-        {
-          _id: "AWRD456",
-          name: "Template 3",
-        },
-      ];
-    return (
-        <>
-        <div className="flex flex-col gap-8">
-        <h2 className="text-text text-base font-work-sans font-semibold">Choose the template for sending emails</h2>
-        <h2 className="text-text text-base font-work-sans font-semibold">Template List</h2>
+const SelectTemplate = ({
+  setSelectedPage,
+  setSelectedTemplate,
+}: {
+  setSelectedPage: React.Dispatch<React.SetStateAction<string>>;
+  setSelectedTemplate: React.Dispatch<React.SetStateAction<string>>;
+}): JSX.Element => {
+  const templatesLists = [
+    {
+      _id: "AWRD456",
+      name: "Template 1",
+    },
+    {
+      _id: "AWRD456",
+      name: "Template 2",
+    },
+    {
+      _id: "AWRD456",
+      name: "Template 3",
+    },
+    {
+      _id: "AWRD456",
+      name: "Template 3",
+    },
+    {
+      _id: "AWRD456",
+      name: "Template 3",
+    },
+    {
+      _id: "AWRD456",
+      name: "Template 3",
+    },
+    {
+      _id: "AWRD456",
+      name: "Template 3",
+    },
+  ];
+  return (
+    <>
+      <div className="flex flex-col gap-8">
+        <h2 className="text-text text-base font-work-sans font-semibold">
+          Choose the template for sending emails
+        </h2>
+        <h2 className="text-text text-base font-work-sans font-semibold">
+          Template List
+        </h2>
         {/* table */}
         <div className="flex flex-col gap-0 min-w-[800px] w-full max-w-7xl scrollbar-md">
           {/* table head */}
@@ -67,6 +77,10 @@ const UploadTemplate = () : JSX.Element => {
               <div className="flex items-center my-auto gap-12">
                 <Button
                   variant="supportive"
+                  onClick={() => {
+                    setSelectedTemplate(item._id);
+                    setSelectedPage("template-selected");
+                  }}
                 >
                   Select
                 </Button>
@@ -75,8 +89,8 @@ const UploadTemplate = () : JSX.Element => {
           ))}
         </div>
       </div>
-        </>
-    );
+    </>
+  );
 };
 
-export default UploadTemplate;
+export default SelectTemplate;

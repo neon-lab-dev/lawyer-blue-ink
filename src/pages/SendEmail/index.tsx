@@ -1,15 +1,38 @@
-import leftArrow from "../../assets/icons/left-arrow.svg"
+import { useState } from "react";
+import SelectTemplate from "./SelectTemplate";
+import SelectedTemplate from "./TemplateSelected";
+import EmterDetails from "./EnterDetails";
 import ExcelSheet from "./ExcelSheet";
-import SelectedTemplate from "./SelectedTemplate";
-import UploadTemplate from "./UploadTemplate";
 
 const SendEmail = () => {
-  return <div className="flex flex-col gap-6">
-    <img className="w-[44px]" src={leftArrow} alt="" />
-    <h1 className="text-text text-base font-work-sans font-semibold">Excel Sheet</h1>
-    <ExcelSheet/>
-    <UploadTemplate/>
-    <SelectedTemplate/>
-    </div>;
+  const [selectedPage, setSelectedPage] = useState("select-template");
+  const [selectedTemplate, setSelectedTemplate] = useState<string>("");
+  const [excelFileDetails, setExcelFileDetails] = useState<any>({});
+
+  if (selectedPage === "select-template") {
+    return (
+      <SelectTemplate
+        setSelectedPage={setSelectedPage}
+        setSelectedTemplate={setSelectedTemplate}
+      />
+    );
+  }
+
+  if (selectedPage === "template-selected") {
+    return (
+      <SelectedTemplate
+        setSelectedPage={setSelectedPage}
+        selectedTemplate={selectedTemplate}
+        setExcelFileDetails={setExcelFileDetails}
+      />
+    );
+  }
+  if (selectedPage === "enter-details") {
+    return <EmterDetails />;
+  }
+
+  if (selectedPage === "excel-sheet") {
+    return <ExcelSheet setSelectedPage={setSelectedPage} />;
+  }
 };
 export default SendEmail;
