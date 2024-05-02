@@ -1,6 +1,7 @@
 import Button from "@/components/reusable/Button";
 import article from "@/assets/icons/article.svg";
 import React from "react";
+import { templates } from "@/assets/mockData/templates";
 
 const SelectTemplate = ({
   setSelectedPage,
@@ -9,36 +10,6 @@ const SelectTemplate = ({
   setSelectedPage: React.Dispatch<React.SetStateAction<string>>;
   setSelectedTemplate: React.Dispatch<React.SetStateAction<string>>;
 }): JSX.Element => {
-  const templatesLists = [
-    {
-      _id: "AWRD456",
-      name: "Template 1",
-    },
-    {
-      _id: "AWRD456",
-      name: "Template 2",
-    },
-    {
-      _id: "AWRD456",
-      name: "Template 3",
-    },
-    {
-      _id: "AWRD456",
-      name: "Template 3",
-    },
-    {
-      _id: "AWRD456",
-      name: "Template 3",
-    },
-    {
-      _id: "AWRD456",
-      name: "Template 3",
-    },
-    {
-      _id: "AWRD456",
-      name: "Template 3",
-    },
-  ];
   return (
     <>
       <div className="flex flex-col gap-8">
@@ -60,11 +31,11 @@ const SelectTemplate = ({
               )
             )}
           </div>
-          {templatesLists.map((item, i) => (
+          {templates.map((item, i) => (
             <div
               key={i}
               className={`rounded-t-[4px] text-gray grid grid-cols-4 border-x text-[14px] border-gray/10 font-medium p-[20px] pl-[60px] ${
-                i === templatesLists.length - 1 ? "border-b" : "border-y"
+                i === templates.length - 1 ? "border-b" : "border-y"
               }`}
             >
               <span className="my-auto">{item._id}</span>

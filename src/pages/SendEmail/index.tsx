@@ -8,7 +8,7 @@ const SendEmail = () => {
   const [selectedPage, setSelectedPage] = useState("select-template");
   const [selectedTemplate, setSelectedTemplate] = useState<string>("");
   //@ts-ignore
-  const [excelFileDetails, setExcelFileDetails] = useState<any>({});
+  const [excelFileDetails, setExcelFileDetails] = useState<any>([]);
 
   if (selectedPage === "select-template") {
     return (
@@ -33,7 +33,12 @@ const SendEmail = () => {
   }
 
   if (selectedPage === "excel-sheet") {
-    return <ExcelSheet setSelectedPage={setSelectedPage} />;
+    return (
+      <ExcelSheet
+        setSelectedPage={setSelectedPage}
+        excelFileDetails={excelFileDetails}
+      />
+    );
   }
 };
 export default SendEmail;

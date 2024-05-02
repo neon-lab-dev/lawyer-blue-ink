@@ -1,48 +1,55 @@
 import article from "@/assets/icons/article.svg";
 import Button from "@/components/reusable/Button";
 import deleteIcon from "@/assets/icons/delete.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "@/components/reusable/Modal";
-import previewImage from "@/assets/images/preview-img.jpeg";
+import { templates } from "@/assets/mockData/templates";
+import { renderAsync } from "docx-preview";
 
 const ViewTemplate = () => {
-  const templates = [
-    {
-      _id: "1",
-      name: "Template 1",
-    },
-    {
-      _id: "2",
-      name: "Template 2",
-    },
-    {
-      _id: "3",
-      name: "Template 3",
-    },
-    {
-      _id: "3",
-      name: "Template 3",
-    },
-    {
-      _id: "3",
-      name: "Template 3",
-    },
-    {
-      _id: "3",
-      name: "Template 3",
-    },
-    {
-      _id: "3",
-      name: "Template 3",
-    },
-  ];
-
+  const [selectedTemplate, setSelectedTemplate] = useState<string>("");
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [deleteModal, setDeleteModal] = useState({
     isOpen: false,
     id: "",
     templateName: "",
   });
+
+  useEffect(() => {
+    if (!selectedTemplate) return;
+    const el = document.getElementById("docx-preview-container");
+    const binaryString = window.atob(selectedTemplate);
+    const binaryLen = binaryString.length;
+    const bytes = new Uint8Array(binaryLen);
+    for (let j = 0; j < binaryLen; j++) {
+      const ascii = binaryString.charCodeAt(j);
+      bytes[j] = ascii;
+    }
+    const blob = new Blob([bytes], {
+      type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    });
+    if (el) {
+      renderAsync(blob, el)
+        .catch((err) => {
+          console.error("Error rendering document:", err);
+        })
+        .then(() => {
+          const wrapper = el.querySelector(".docx-wrapper");
+          if (wrapper) {
+            wrapper.setAttribute(
+              "style",
+              "background: white;padding: 0;box-shadow: none;"
+            );
+            const docx = wrapper.querySelector(".docx");
+            if (docx) {
+              docx.setAttribute("style", "box-shadow: none;padding: 1rem;");
+            }
+          }
+        });
+    } else {
+      console.error("Preview element not found.");
+    }
+  }, [selectedTemplate]);
 
   return (
     <>
@@ -76,7 +83,10 @@ const ViewTemplate = () => {
               />
               <div className="flex items-center my-auto gap-12">
                 <Button
-                  onClick={() => setIsPreviewOpen(true)}
+                  onClick={() => {
+                    setIsPreviewOpen(true);
+                    setSelectedTemplate(item.template ?? "");
+                  }}
                   variant="supportive"
                 >
                   View
@@ -106,11 +116,7 @@ const ViewTemplate = () => {
         <div className="flex flex-col h-[600px] w-[730px] items-center gap-5">
           <span className="text-text text-[20px] font-semibold">Preview</span>
           <div className="w-full h-full overflow-x-hidden overflow-y-auto scrollbar-md">
-            <img
-              src={previewImage}
-              alt="preview"
-              className="w-full object-top"
-            />
+            <div id="docx-preview-container"></div>
           </div>
         </div>
       </Modal>
@@ -123,6 +129,7 @@ const ViewTemplate = () => {
             id: "",
             templateName: "",
           });
+          setSelectedTemplate("");
         }}
         showCloseButton={true}
       >

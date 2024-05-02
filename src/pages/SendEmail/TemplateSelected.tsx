@@ -1,12 +1,12 @@
 import { useRef, useState } from "react";
 import Button from "@/components/reusable/Button";
 import leftArrow from "../../assets/icons/left-arrow.svg";
+import excelToJson from "@/utils/excelToJson";
 
 const SelectedTemplate = ({
   setSelectedPage,
   //@ts-ignore
   selectedTemplate,
-  //@ts-ignore
   setExcelFileDetails,
 }: {
   setSelectedPage: React.Dispatch<React.SetStateAction<string>>;
@@ -27,6 +27,13 @@ const SelectedTemplate = ({
     ) {
       setSelectedFile(file);
       setSelectedPage("excel-sheet");
+      excelToJson(file)
+        .then((res) => {
+          setExcelFileDetails(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } else {
       // Reset the file input if the file type is not supported
       if (fileInputRef.current) {

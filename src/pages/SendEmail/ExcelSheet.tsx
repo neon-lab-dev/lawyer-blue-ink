@@ -8,9 +8,12 @@ import EmailSentModal from "./EmailSentModal";
 
 const ExcelSheet = ({
   setSelectedPage,
+  excelFileDetails,
 }: {
   setSelectedPage: React.Dispatch<React.SetStateAction<string>>;
+  excelFileDetails: any[];
 }) => {
+  console.log(excelFileDetails);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isSentEmailModalOpen, setIsSentEmailModalOpen] = useState(false);
   const [filePreview, setFilePreview] = useState<File | null>(null);
@@ -76,36 +79,47 @@ const ExcelSheet = ({
               </tr>
             </thead>
             <tbody>
-              <tr className="text-gray text-[15px] font-work-sans font-normal">
-                <td className="border px-3 py-4">123456</td>
-                <td className="border px-3 py-4">Trademark Name</td>
-                <td className="border px-3 py-4">20</td>
-                <td className="border px-3 py-4">Shri Jawahar Lal Lamba</td>
-                <td className="border px-3 py-4">25,00,000</td>
-                <td className="border px-3 py-4">2 years</td>
-                <td className="border px-3 py-4">
-                  Shrijawahar lamba@gmail.com
-                </td>
-                <td className="border px-3 py-4">+91 98888 55825</td>
-                <td className="border px-3 py-4">
-                  <img className="cursor-pointer" src={attachEmail} alt="" />
-                </td>
+              {excelFileDetails?.map((item: any, i: number) => (
+                <tr
+                  key={i}
+                  className="text-gray text-[15px] font-work-sans font-normal"
+                >
+                  <td className="border px-3 py-4">
+                    {item["TRADEMARK_APPLICATION_NUMBER"]}
+                  </td>
+                  <td className="border px-3 py-4">{item["TRADEMARK_NAME"]}</td>
+                  <td className="border px-3 py-4">{item["CLASS"]}</td>
+                  <td className="border px-3 py-4">{item["CLIENT_NAME"]}</td>
+                  <td className="border px-3 py-4">{item["COST_INVOLVED"]}</td>
+                  <td className="border px-3 py-4">
+                    {item["TIME_FOR_EXECUTION_OF_WORK"]}
+                  </td>
+                  <td className="border px-3 py-4">
+                    {item["EMAIL_ID_OF_CLIENT"]}
+                  </td>
+                  <td className="border px-3 py-4">
+                    {item["WHATSAPP_NUMBER"]}
+                  </td>
+                  <td className="border px-3 py-4">
+                    <img className="cursor-pointer" src={attachEmail} alt="" />
+                  </td>
 
-                <td className="border px-3 py-4">
-                  <input
-                    type="file"
-                    ref={fileInputRef}
-                    className="hidden"
-                    onChange={handleFileInputChange}
-                  />
-                  <button onClick={handleAttachFileClick}>
-                    <img className="cursor-pointer" src={attachFile} alt="" />
-                  </button>
-                </td>
-                <td onClick={handleModal} className="border px-3 py-4">
-                  <img className="cursor-pointer" src={send} alt="" />
-                </td>
-              </tr>
+                  <td className="border px-3 py-4">
+                    <input
+                      type="file"
+                      ref={fileInputRef}
+                      className="hidden"
+                      onChange={handleFileInputChange}
+                    />
+                    <button onClick={handleAttachFileClick}>
+                      <img className="cursor-pointer" src={attachFile} alt="" />
+                    </button>
+                  </td>
+                  <td onClick={handleModal} className="border px-3 py-4">
+                    <img className="cursor-pointer" src={send} alt="" />
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
 
