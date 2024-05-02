@@ -6,9 +6,11 @@ import { templates } from "@/assets/mockData/templates";
 const SelectTemplate = ({
   setSelectedPage,
   setSelectedTemplate,
+  setSelectedTemplateName,
 }: {
   setSelectedPage: React.Dispatch<React.SetStateAction<string>>;
   setSelectedTemplate: React.Dispatch<React.SetStateAction<string>>;
+  setSelectedTemplateName: React.Dispatch<React.SetStateAction<string>>;
 }): JSX.Element => {
   return (
     <>
@@ -51,6 +53,7 @@ const SelectTemplate = ({
                   onClick={() => {
                     setSelectedTemplate(item.template);
                     setSelectedPage("template-selected");
+                    setSelectedTemplateName(item.name);
                   }}
                 >
                   Select

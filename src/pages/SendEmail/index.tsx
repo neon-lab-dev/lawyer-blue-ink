@@ -7,6 +7,7 @@ import ExcelSheet from "./ExcelSheet";
 const SendEmail = () => {
   const [selectedPage, setSelectedPage] = useState("select-template");
   const [selectedTemplate, setSelectedTemplate] = useState<string>("");
+  const [selectedTemplateName, setSelectedTemplateName] = useState<string>("");
   //@ts-ignore
   const [excelFileDetails, setExcelFileDetails] = useState<any>([]);
 
@@ -15,6 +16,7 @@ const SendEmail = () => {
       <SelectTemplate
         setSelectedPage={setSelectedPage}
         setSelectedTemplate={setSelectedTemplate}
+        setSelectedTemplateName={setSelectedTemplateName}
       />
     );
   }
@@ -25,6 +27,7 @@ const SendEmail = () => {
         setSelectedPage={setSelectedPage}
         selectedTemplate={selectedTemplate}
         setExcelFileDetails={setExcelFileDetails}
+        selectedTemplateName={selectedTemplateName}
       />
     );
   }
