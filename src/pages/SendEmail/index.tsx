@@ -37,6 +37,7 @@ const SendEmail = () => {
       <ExcelSheet
         setSelectedPage={setSelectedPage}
         excelFileDetails={excelFileDetails}
+        selectedTemplate={selectedTemplate}
       />
     );
   }
