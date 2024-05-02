@@ -7,7 +7,6 @@ const SelectedTemplate = ({
   setSelectedPage,
   //@ts-ignore
   selectedTemplate,
-  //@ts-ignore
   setExcelFileDetails,
 }: {
   setSelectedPage: React.Dispatch<React.SetStateAction<string>>;
@@ -30,7 +29,6 @@ const SelectedTemplate = ({
       setSelectedPage("excel-sheet");
       excelToJson(file)
         .then((res) => {
-          console.log(res);
           setExcelFileDetails(res);
         })
         .catch((err) => {

@@ -13,10 +13,15 @@ const excelToJson = (file: Blob) => {
           headers.forEach((header, i) => {
             obj[String(header).toUpperCase()] = row[i];
           });
+
+          //filter the objects if more than or equal to  length- 1 falsy values
+          const truthy = Object.values(obj).filter((value) => value);
+          if (truthy.length < Object.keys(obj).length - 1) {
+            return null;
+          }
           return obj;
         });
-        console.log(result);
-        resolve(result);
+        resolve(result.filter((item) => item));
       });
     };
     fileReader.onerror = (e) => {
