@@ -30,7 +30,7 @@ const FilePreview = ({
       const el = document.getElementById("docx-preview");
       if (el) {
         renderAsync(docFile, el)
-          .catch((err) => {
+          .catch((err: any) => {
             console.error("Error rendering document:", err);
             setError("Error rendering document.");
           });
@@ -56,7 +56,6 @@ const FilePreview = ({
             <img src={arrowleft} alt="Back" />
           </button>
         </Link>
-        
       </div>
       <h1 className="font-bold text-2xl py-6">Preview Uploaded File</h1>
       {error ? (
