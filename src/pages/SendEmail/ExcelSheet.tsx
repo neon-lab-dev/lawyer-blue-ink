@@ -1,11 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import attachEmail from "../../assets/icons/attach_email.svg";
 import attachFile from "../../assets/icons/attach_file.svg";
 import send from "../../assets/icons/send.svg";
 import SendEmailModal from "./SendEmailModal";
 import leftArrow from "../../assets/icons/left-arrow.svg";
 import EmailSentModal from "./EmailSentModal";
-import DocxWithReplacedText from "./DocxWithReplacedText";
 
 const ExcelSheet = ({
   setSelectedPage,
