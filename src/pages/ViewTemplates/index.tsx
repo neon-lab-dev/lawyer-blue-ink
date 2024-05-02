@@ -85,7 +85,7 @@ const ViewTemplate = () => {
                 <Button
                   onClick={() => {
                     setIsPreviewOpen(true);
-                    setSelectedTemplate(item.template);
+                    setSelectedTemplate(item.template ?? "");
                   }}
                   variant="supportive"
                 >
