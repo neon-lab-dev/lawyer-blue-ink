@@ -1,26 +1,29 @@
-import exJ from "convert-excel-to-json";
+import readXlsxFile from "read-excel-file";
 
-const excelToJson = (file: File) => {
-  try {
-    const reader = new FileReader();
-    reader.readAsArrayBuffer(file);
-    reader.onload = (event) => {
-      const data = event.target?.result as string;
-      try {
-        const workbook = exJ({
-          source: data,
-          header: {
-            rows: 1,
-          },
+const excelToJson = (file: Blob) => {
+  return new Promise((resolve, reject) => {
+    const fileReader = new FileReader();
+    fileReader.onload = (e) => {
+      const arrayBuffer = e.target?.result as ArrayBuffer;
+      readXlsxFile(arrayBuffer).then((rows) => {
+        const headers = rows[0];
+        const data = rows.slice(1);
+        const result = data.map((row) => {
+          const obj: any = {};
+          headers.forEach((header, i) => {
+            obj[String(header).toUpperCase()] = row[i];
+          });
+          return obj;
         });
-        console.log(workbook);
-      } catch (err) {
-        console.log(err);
-      }
+        console.log(result);
+        resolve(result);
+      });
     };
-  } catch (err) {
-    console.log(err);
-  }
+    fileReader.onerror = (e) => {
+      reject(e);
+    };
+    fileReader.readAsArrayBuffer(file as any);
+  });
 };
 
 export default excelToJson;

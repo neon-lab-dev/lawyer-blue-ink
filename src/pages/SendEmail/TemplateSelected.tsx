@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import Button from "@/components/reusable/Button";
 import leftArrow from "../../assets/icons/left-arrow.svg";
+import excelToJson from "@/utils/excelToJson";
 
 const SelectedTemplate = ({
   setSelectedPage,
@@ -27,6 +28,14 @@ const SelectedTemplate = ({
     ) {
       setSelectedFile(file);
       setSelectedPage("excel-sheet");
+      excelToJson(file)
+        .then((res) => {
+          console.log(res);
+          setExcelFileDetails(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } else {
       // Reset the file input if the file type is not supported
       if (fileInputRef.current) {
