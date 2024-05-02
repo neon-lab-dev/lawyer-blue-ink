@@ -2,18 +2,23 @@ import { useRef, useState } from "react";
 import Button from "@/components/reusable/Button";
 import leftArrow from "../../assets/icons/left-arrow.svg";
 import excelToJson from "@/utils/excelToJson";
+import DocxPreview from "@/components/reusable/DocxPreview";
 
 const SelectedTemplate = ({
   setSelectedPage,
   //@ts-ignore
   selectedTemplate,
   setExcelFileDetails,
+  selectedTemplateName,
 }: {
   setSelectedPage: React.Dispatch<React.SetStateAction<string>>;
   selectedTemplate: string;
   setExcelFileDetails: React.Dispatch<React.SetStateAction<any>>;
+  selectedTemplateName: string;
 }): JSX.Element => {
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  //@ts-ignore
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,10 +68,9 @@ const SelectedTemplate = ({
       <div className="flex items-center gap-8">
         <div className="rounded border-2 border-border border-dashed p-6 bg-[#FBFBFB] w-[50%] h-[376px] overflow-y-auto scrollbar-md flex flex-col gap-[10px]">
           <h1 className="text-text text-[14px] font-work-sans font-semibold">
-            Template_Name
+            {selectedTemplateName}
           </h1>
-          {/* Render the uploaded Excel file using react-doc-viewer */}
-          {selectedFile && <div></div>}
+          <DocxPreview selectedTemplate={selectedTemplate} />
         </div>
 
         <div className="w-[50%] h-[376px] px-10 flex flex-col gap-6 border-l border-[#3F32CC]">

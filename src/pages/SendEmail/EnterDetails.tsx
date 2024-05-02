@@ -31,7 +31,7 @@ const TrademarkForm: React.FC = () => {
   return (
     <div className="mx-auto bg-white">
       <div className="pb-10 flex justify-between items-center">
-        <Link to="/">
+        <Link to="/send-email">
           <img src={arrowleft} alt="Back" />
         </Link>
       </div>

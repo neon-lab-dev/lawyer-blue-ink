@@ -1,10 +1,10 @@
 import article from "@/assets/icons/article.svg";
 import Button from "@/components/reusable/Button";
 import deleteIcon from "@/assets/icons/delete.svg";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Modal from "@/components/reusable/Modal";
 import { templates } from "@/assets/mockData/templates";
-import { renderAsync } from "docx-preview";
+import DocxPreview from "@/components/reusable/DocxPreview";
 
 const ViewTemplate = () => {
   const [selectedTemplate, setSelectedTemplate] = useState<string>("");
@@ -14,42 +14,6 @@ const ViewTemplate = () => {
     id: "",
     templateName: "",
   });
-
-  useEffect(() => {
-    if (!selectedTemplate) return;
-    const el = document.getElementById("docx-preview-container");
-    const binaryString = window.atob(selectedTemplate);
-    const binaryLen = binaryString.length;
-    const bytes = new Uint8Array(binaryLen);
-    for (let j = 0; j < binaryLen; j++) {
-      const ascii = binaryString.charCodeAt(j);
-      bytes[j] = ascii;
-    }
-    const blob = new Blob([bytes], {
-      type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-    });
-    if (el) {
-      renderAsync(blob, el)
-        .catch((err) => {
-          console.error("Error rendering document:", err);
-        })
-        .then(() => {
-          const wrapper = el.querySelector(".docx-wrapper");
-          if (wrapper) {
-            wrapper.setAttribute(
-              "style",
-              "background: white;padding: 0;box-shadow: none;"
-            );
-            const docx = wrapper.querySelector(".docx");
-            if (docx) {
-              docx.setAttribute("style", "box-shadow: none;padding: 1rem;");
-            }
-          }
-        });
-    } else {
-      console.error("Preview element not found.");
-    }
-  }, [selectedTemplate]);
 
   return (
     <>
@@ -116,7 +80,7 @@ const ViewTemplate = () => {
         <div className="flex flex-col h-[600px] w-[730px] items-center gap-5">
           <span className="text-text text-[20px] font-semibold">Preview</span>
           <div className="w-full h-full overflow-x-hidden overflow-y-auto scrollbar-md">
-            <div id="docx-preview-container"></div>
+            <DocxPreview selectedTemplate={selectedTemplate} />
           </div>
         </div>
       </Modal>
