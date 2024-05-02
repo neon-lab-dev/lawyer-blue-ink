@@ -34,8 +34,8 @@ const TrademarkForm = ({ selectedTemplate }: { selectedTemplate: string }) => {
   useEffect(() => {
     (async () => {
       const vars = await extractVariablesFromDocx(selectedTemplate);
-      console.log("Variables extracted:", vars);
-      setVars(vars);
+      const uniqueVars = [...new Set(vars)]; // Remove duplicates
+      setVars(uniqueVars);
     })();
   }, [selectedTemplate]);
 
