@@ -1,21 +1,24 @@
-import React, { useRef } from 'react'; // Explicitly import React and useRef
-import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
-import Button from '@/components/reusable/Button';
+import React, { useEffect, useRef, useState } from "react"; // Explicitly import React and useRef
+import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
+import Button from "@/components/reusable/Button";
 import arrowleft from "@/assets/images/arrow_back.svg";
-import attach from "@/assets/images/attach_file.svg"; 
+import attach from "@/assets/images/attach_file.svg";
+import extractVariablesFromDocx from "@/utils/extractVariablesFromDocx";
 
-const TrademarkForm: React.FC = () => {
+const TrademarkForm = ({ selectedTemplate }: { selectedTemplate: string }) => {
   const { register, handleSubmit } = useForm();
+  const [vars, setVars] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement | null>(null); // Correct useRef type
 
   const onSubmit = (data: Record<string, any>) => {
-    console.log('Form submitted:', data);
+    console.log("Form submitted:", data);
     // Process form data
   };
 
   const handleAttachFile = () => {
-    if (fileInputRef.current) { // Check for null before calling click()
+    if (fileInputRef.current) {
+      // Check for null before calling click()
       fileInputRef.current.click();
     }
   };
@@ -28,6 +31,14 @@ const TrademarkForm: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    (async () => {
+      const vars = await extractVariablesFromDocx(selectedTemplate);
+      console.log("Variables extracted:", vars);
+      setVars(vars);
+    })();
+  }, [selectedTemplate]);
+
   return (
     <div className="mx-auto bg-white">
       <div className="pb-10 flex justify-between items-center">
@@ -36,64 +47,22 @@ const TrademarkForm: React.FC = () => {
         </Link>
       </div>
 
-      <span className="font-work-sans text-[16px] font-semibold pt-6">Enter Details</span>
+      <span className="font-work-sans text-[16px] font-semibold pt-6">
+        Enter Details
+      </span>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid grid-cols-2 gap-10 w-[998px] pt-6 m-1">
-          <input
-            type="text"
-            placeholder="Track Application Number"
-            className="w-full border border-[#D0D0D0] p-4 rounded"
-            {...register('applicationNumber')}
-          />
-
-          <input
-            type="number"
-            placeholder="Time for Execution of Work"
-            className="w-full border p-4 rounded border-[#D0D0D0]"
-            {...register('executionTime')}
-          />
-
-          <input
-            type="text"
-            placeholder="Trademark Name"
-            className="w-full border p-4 rounded border-[#D0D0D0]"
-            {...register('trademarkName')}
-          />
-
-          <input
-            type="email"
-            placeholder="Email ID of Client"
-            className="w-full border p-4 rounded border-[#D0D0D0]"
-            {...register('email')}
-          />
-
-          <input
-            type="text"
-            placeholder="Class"
-            className="w-full border p-4 rounded border-[#D0D0D0]"
-            {...register('class')}
-          />
-
-          <input
-            type="text"
-            placeholder="WhatsApp Number"
-            className="w-full border p-4 rounded border-[#D0D0D0]"
-            {...register('whatsapp')}
-          />
-
-          <input
-            type="text"
-            placeholder="Client Name"
-            className="w-full border p-4 rounded border-[#D0D0D0]"
-            {...register('clientName')}
-          />
-
-          <input
-            type="text"
-            placeholder="CC"
-            className="w-full border p-4 rounded border-[#D0D0D0]"
-            {...register('cc')}
-          />
+          {vars.map((variable, i) => (
+            <input
+              key={i}
+              type="text"
+              placeholder={variable}
+              className="w-full border border-[#D0D0D0] p-4 rounded"
+              {...register(variable, {
+                required: true,
+              })}
+            />
+          ))}
         </div>
 
         <div className="mt-6 flex gap-4 justify-end w-[998px]">

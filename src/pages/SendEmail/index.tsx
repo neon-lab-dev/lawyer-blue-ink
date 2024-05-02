@@ -1,7 +1,7 @@
 import { useState } from "react";
 import SelectTemplate from "./SelectTemplate";
 import SelectedTemplate from "./TemplateSelected";
-import EmterDetails from "./EnterDetails";
+import EnterDetails from "./EnterDetails";
 import ExcelSheet from "./ExcelSheet";
 
 const SendEmail = () => {
@@ -32,7 +32,7 @@ const SendEmail = () => {
     );
   }
   if (selectedPage === "enter-details") {
-    return <EmterDetails />;
+    return <EnterDetails selectedTemplate={selectedTemplate} />;
   }
 
   if (selectedPage === "excel-sheet") {
