@@ -2,7 +2,17 @@ import { useRef, useState } from "react";
 import Button from "@/components/reusable/Button";
 import leftArrow from "../../assets/icons/left-arrow.svg";
 
-const SelectedTemplate = (): JSX.Element => {
+const SelectedTemplate = ({
+  setSelectedPage,
+  //@ts-ignore
+  selectedTemplate,
+  //@ts-ignore
+  setExcelFileDetails,
+}: {
+  setSelectedPage: React.Dispatch<React.SetStateAction<string>>;
+  selectedTemplate: string;
+  setExcelFileDetails: React.Dispatch<React.SetStateAction<any>>;
+}): JSX.Element => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
@@ -16,6 +26,7 @@ const SelectedTemplate = (): JSX.Element => {
           "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
     ) {
       setSelectedFile(file);
+      setSelectedPage("excel-sheet");
     } else {
       // Reset the file input if the file type is not supported
       if (fileInputRef.current) {
@@ -35,7 +46,9 @@ const SelectedTemplate = (): JSX.Element => {
 
   return (
     <div className="flex flex-col gap-6">
-      <img className="w-[44px]" src={leftArrow} alt="" />
+      <button onClick={() => setSelectedPage("select-template")}>
+        <img className="w-[44px]" src={leftArrow} alt="" />
+      </button>
       <h1 className="text-text text-base font-work-sans font-semibold">
         Selected Template Preview
       </h1>
@@ -56,6 +69,7 @@ const SelectedTemplate = (): JSX.Element => {
 
           <div className="flex items-center gap-6">
             <Button
+              onClick={() => setSelectedPage("enter-details")}
               variant="secondary"
               className="text-primary text-base font-work-sans font-medium px-8 py-4"
             >
