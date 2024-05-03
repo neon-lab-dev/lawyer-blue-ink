@@ -11,17 +11,20 @@ const SendEmailModal = ({
   setIsSentEmailModalOpen,
   activeData,
   selectedTemplate,
+  attachedFiles,
+  setAttachedFiles,
 }: {
   isModalOpen: boolean;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setIsSentEmailModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   activeData: any;
   selectedTemplate: string;
+  setAttachedFiles: React.Dispatch<any>;
+  attachedFiles: File[];
 }): JSX.Element => {
   const [dataToSent, setDataToSent] = useState(activeData);
   const [from, setFrom] = useState("tilak@gmail.com");
   const [subject, setSubject] = useState("");
-  const [files, setFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleAttachFileClick = () => {
@@ -32,13 +35,12 @@ const SendEmailModal = ({
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     if (!event.target.files) return;
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      //convert to base64 and store in state
-      setFiles([...files, file]);
-    };
-    reader.readAsDataURL(file);
+    const files = event.target.files;
+    if (attachedFiles.length > 0) {
+      setAttachedFiles([...attachedFiles, ...files]);
+    } else {
+      setAttachedFiles([...files]);
+    }
   };
 
   useEffect(() => {
@@ -115,6 +117,7 @@ const SendEmailModal = ({
               type="text"
               placeholder="     "
               value={subject}
+              defaultValue={dataToSent ? dataToSent["SUBJECT"] || "" : ""}
               onChange={(e) => setSubject(e.target.value)}
               className="border border-border peer h-full w-full rounded bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 focus:border focus:border-border focus:border-t-transparent focus:outline-0"
             />
@@ -126,7 +129,7 @@ const SendEmailModal = ({
           <div className="flex items-center gap-9">
             <div className="border rounded border-border w-[50px]  flex flex-col">
               <div className="h-[28px] bg-white text-text text-[14px] font-work-sans font-medium flex justify-center items-center">
-                {files.length}
+                {attachedFiles.length}
               </div>
 
               <input

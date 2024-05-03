@@ -9,10 +9,14 @@ const ExcelSheet = ({
   setSelectedPage,
   excelFileDetails,
   selectedTemplate,
+  attachedFiles,
+  setAttachedFiles,
 }: {
   setSelectedPage: React.Dispatch<React.SetStateAction<string>>;
   excelFileDetails: any[];
   selectedTemplate: string;
+  setAttachedFiles: React.Dispatch<any>;
+  attachedFiles: File[];
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isSentEmailModalOpen, setIsSentEmailModalOpen] = useState(false);
@@ -125,6 +129,8 @@ const ExcelSheet = ({
               setIsSentEmailModalOpen={setIsSentEmailModalOpen}
               selectedTemplate={selectedTemplate}
               activeData={activeData}
+              setAttachedFiles={setAttachedFiles}
+              attachedFiles={attachedFiles}
             />
           </div>
         ) : (
