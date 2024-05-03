@@ -1,4 +1,32 @@
+import { Link, useLocation } from "react-router-dom";
+import rightArrow from "../../assets/icons/right-arrow.svg";
+
 const AppHeader = () => {
-  return <div className="w-full h-[80px] bg-gray-500">AppHeader</div>;
+  const { pathname } = useLocation();
+
+  const capitalizeFirstLetter = (word: string): string => {
+    return word.charAt(0).toUpperCase() + word.slice(1);
+  };
+
+  const title = pathname
+    .substring(1)
+    .split("-")
+    .map(capitalizeFirstLetter)
+    .join(" ");
+    
+  return (
+    <div className="w-full h-[80px] bg-header flex items-center gap-[18px] px-9 py-5">
+      <Link
+        to={"/"}
+        className="text-text font-work-sans text-base font-normal leading-normal"
+      >
+        Dashboard
+      </Link>
+      <img className="w-6 h-6" src={rightArrow} alt="" />
+      <h1 className="text-tab-activation font-work-sans text-base font-semibold leading-normal">
+        {title || "Upload Template"}
+      </h1>
+    </div>
+  );
 };
 export default AppHeader;
