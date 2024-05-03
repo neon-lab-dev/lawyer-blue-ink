@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import Button from "@/components/reusable/Button";
 import { PulseLoader } from "react-spinners";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { handleLogin, handleLogout } from "@/api/auth";
+import { handleLogin } from "@/api/auth";
 import toast from "react-hot-toast";
 
 interface FormData {

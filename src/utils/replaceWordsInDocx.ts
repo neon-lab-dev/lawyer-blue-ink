@@ -1,4 +1,3 @@
-import mammoth from "mammoth";
 import PizZip from "pizzip";
 import Docxtemplater from "docxtemplater";
 
