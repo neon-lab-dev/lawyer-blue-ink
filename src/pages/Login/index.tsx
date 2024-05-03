@@ -5,6 +5,10 @@ import logo from "../../assets/icons/logo.svg";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import Button from "@/components/reusable/Button";
+import { PulseLoader } from "react-spinners";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { handleLogin } from "@/api/auth";
+import toast from "react-hot-toast";
 
 interface FormData {
   email: string;
@@ -18,6 +22,7 @@ const Login = () => {
   };
 
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   const {
     register,
@@ -25,10 +30,27 @@ const Login = () => {
     formState: { errors },
   } = useForm<FormData>();
 
-  const handleLogin = (data: FormData): void => {
-    console.log(data);
-    navigate("/");
+  const { mutate, isPending } = useMutation({
+    mutationFn: handleLogin,
+    onSuccess: () => {
+      queryClient
+        .invalidateQueries({
+          queryKey: ["me"],
+        })
+        .then(() => {
+          navigate("/");
+          toast.success("Login successful");
+        });
+    },
+    onError: (error: string) => {
+      toast.error(error);
+    },
+  });
+
+  const onSubmit = (data: FormData) => {
+    mutate(data);
   };
+
   return (
     <div className="flex flex-col justify-center items-center h-screen bg-white border rounded-lg px-10">
       <div className="w-full md:w-[406px] flex flex-col gap-6 p-10 rounded-lg bg-white border border-[#E5E7EB]">
@@ -39,17 +61,14 @@ const Login = () => {
         </div>
 
         {/* Input fields and submit btn */}
-        <form
-          onSubmit={handleSubmit(handleLogin)}
-          className="flex flex-col gap-6"
-        >
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
           <div className="flex flex-col gap-1">
             <div className="relative flex gap-2 items-center bg-white border border-[#D0D0D0] rounded px-6 h-[64px] w-full">
               <input
                 className="w-full h-full focus:outline-none"
-                placeholder="User Id"
-                type="number"
-                {...register("email", { required: "User Id required" })}
+                placeholder="Email"
+                type="email"
+                {...register("email", { required: "Email is required" })}
               />
             </div>
             {errors.email && (
@@ -86,7 +105,9 @@ const Login = () => {
             )}
           </div>
 
-          <Button className="mt-4">Login</Button>
+          <Button className="mt-4">
+            {isPending ? <PulseLoader color="#cdcfd1" size={6} /> : "Login"}
+          </Button>
         </form>
       </div>
     </div>
