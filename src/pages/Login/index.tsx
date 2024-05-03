@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import Button from "@/components/reusable/Button";
 import { PulseLoader } from "react-spinners";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { handleLogin } from "@/api/auth";
+import { handleLogin, handleLogout } from "@/api/auth";
 import toast from "react-hot-toast";
 
 interface FormData {
@@ -37,9 +37,14 @@ const Login = () => {
         .invalidateQueries({
           queryKey: ["me"],
         })
-        .then(() => {
-          navigate("/");
-          toast.success("Login successful");
+        .then((user) => {
+          //@ts-ignore
+          if (user.role !== "admin") {
+            toast.error("You are not authorized to access this page");
+          } else {
+            navigate("/");
+            toast.success("Login successful");
+          }
         });
     },
     onError: (error: string) => {

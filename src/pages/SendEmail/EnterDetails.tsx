@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react"; // Explicitly import React and useRef
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
 import Button from "@/components/reusable/Button";
 import arrowleft from "@/assets/images/arrow_back.svg";
 import attach from "@/assets/images/attach_file.svg";

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import attachFile from "../../assets/icons/attach_file.svg";
 import send from "../../assets/icons/send.svg";
 import SendEmailModal from "./SendEmailModal";
