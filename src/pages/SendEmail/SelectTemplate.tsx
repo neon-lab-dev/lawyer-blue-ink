@@ -1,7 +1,10 @@
 import Button from "@/components/reusable/Button";
 import article from "@/assets/icons/article.svg";
-import React from "react";
-import { templates } from "@/assets/mockData/templates";
+import React, { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { ITemplate } from "@/types/template.type";
+import { handleGetTemplates } from "@/api/template";
+import Loading from "@/components/reusable/Loading";
 
 const SelectTemplate = ({
   setSelectedPage,
@@ -12,6 +15,22 @@ const SelectTemplate = ({
   setSelectedTemplate: React.Dispatch<React.SetStateAction<string>>;
   setSelectedTemplateName: React.Dispatch<React.SetStateAction<string>>;
 }): JSX.Element => {
+  const [templates, setTemplates] = useState<ITemplate[]>([]);
+
+  const { data, isLoading, isError } = useQuery<ITemplate[]>({
+    queryFn: handleGetTemplates,
+    queryKey: ["templates"],
+  });
+
+  useEffect(() => {
+    if (data) {
+      setTemplates(data);
+    }
+  }, [data]);
+
+  if (isLoading) return <Loading />;
+  if (isError) return <div>Error fetching templates</div>;
+
   return (
     <>
       <div className="flex flex-col gap-8">
@@ -41,19 +60,19 @@ const SelectTemplate = ({
               }`}
             >
               <span className="my-auto">{item._id}</span>
-              <span className="my-auto">{item.name}</span>
+              <span className="my-auto">{item.file_name}</span>
               <img
                 src={article}
-                alt={item.name}
+                alt={item.file_name}
                 className="h-[100px] my-auto w-[100px] aspect-square object-contain object-center"
               />
               <div className="flex items-center my-auto gap-12">
                 <Button
                   variant="supportive"
                   onClick={() => {
-                    setSelectedTemplate(item.template);
+                    setSelectedTemplate(item.file_name);
                     setSelectedPage("template-selected");
-                    setSelectedTemplateName(item.name);
+                    setSelectedTemplateName(item.file_name);
                   }}
                 >
                   Select

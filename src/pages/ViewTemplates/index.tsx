@@ -9,6 +9,7 @@ import { handleDeleteTemplate, handleGetTemplates } from "@/api/template";
 import { ITemplate } from "@/types/template.type";
 import toast from "react-hot-toast";
 import { PulseLoader } from "react-spinners";
+import Loading from "@/components/reusable/Loading";
 
 const ViewTemplate = () => {
   const queryClient = useQueryClient();
@@ -52,7 +53,7 @@ const ViewTemplate = () => {
     },
   });
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Loading />;
   if (isError) return <div>Error fetching templates</div>;
 
   return (
