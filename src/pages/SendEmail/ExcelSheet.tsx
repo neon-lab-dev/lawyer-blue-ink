@@ -61,14 +61,17 @@ const ExcelSheet = ({
               <thead>
                 <tr className="text-text text-[14px] font-work-sans font-medium">
                   {Object.keys(excelFileDetails[0]).map(
-                    (key: string, i: number) => (
-                      <th
-                        key={i}
-                        className="border px-3 py-4 min-w-fit truncate"
-                      >
-                        {key}
-                      </th>
-                    )
+                    (key: string, i: number) => {
+                      if (key === "isSent") return null;
+                      return (
+                        <th
+                          key={i}
+                          className="border px-3 py-4 min-w-fit truncate"
+                        >
+                          {key}
+                        </th>
+                      );
+                    }
                   )}
                   <th className="border px-3 py-4">Attach Files</th>
                   <th className="border px-3 py-4">Send Email</th>
@@ -84,14 +87,17 @@ const ExcelSheet = ({
                         item.isSent ? "bg-[#EEFFE5]" : ""
                       }`}
                     >
-                      {Object.keys(item).map((key: string, i: number) => (
-                        <td
-                          key={i}
-                          className="border px-3 py-4 max-w-[280px] truncate"
-                        >
-                          {item[key]}
-                        </td>
-                      ))}
+                      {Object.keys(item).map((key: string, i: number) => {
+                        if (key === "isSent") return null;
+                        return (
+                          <td
+                            key={i}
+                            className="border px-3 py-4 max-w-[280px] truncate"
+                          >
+                            {item[key]}
+                          </td>
+                        );
+                      })}
                       <td className="border px-3 py-4">
                         <input
                           type="file"
