@@ -70,7 +70,7 @@ const SelectTemplate = ({
                 <Button
                   variant="supportive"
                   onClick={() => {
-                    setSelectedTemplate(item.file_name);
+                    setSelectedTemplate(item.data);
                     setSelectedPage("template-selected");
                     setSelectedTemplateName(item.file_name);
                   }}

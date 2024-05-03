@@ -4,6 +4,11 @@ import attachFile from "../../assets/icons/attach_file.svg";
 import Modal from "@/components/reusable/Modal";
 import { useEffect, useRef, useState } from "react";
 import DocxWithReplacedText from "./DocxWithReplacedText";
+import { useMutation } from "@tanstack/react-query";
+import { handSendEmail } from "@/api/email";
+import toast from "react-hot-toast";
+import { PulseLoader } from "react-spinners";
+import getReplacedTextFromDocx from "@/utils/getReplacedTextFromDocx";
 
 const SendEmailModal = ({
   isModalOpen,
@@ -46,6 +51,38 @@ const SendEmailModal = ({
   useEffect(() => {
     setDataToSent(activeData);
   }, [activeData]);
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: handSendEmail,
+    onError: (error: string) => {
+      toast.error(error);
+    },
+    onSuccess: () => {
+      setIsSentEmailModalOpen(true);
+      setIsModalOpen(false);
+    },
+  });
+
+  const handleSendEmail = async () => {
+    if (
+      !dataToSent.hasOwnProperty("CLIENT'S EMAIL ID") ||
+      !dataToSent.hasOwnProperty("CC EMAILS") ||
+      !subject
+    ) {
+      toast.error("Please fill all the fields");
+      return;
+    }
+    const body = await getReplacedTextFromDocx(selectedTemplate, dataToSent);
+    const data = {
+      to: dataToSent["CLIENT'S EMAIL ID"],
+      cc: dataToSent["CC EMAILS"],
+      subject,
+      body,
+      attachments: attachedFiles,
+    };
+
+    mutate(data);
+  };
 
   return (
     <Modal
@@ -117,7 +154,6 @@ const SendEmailModal = ({
               type="text"
               placeholder="     "
               value={subject}
-              defaultValue={dataToSent ? dataToSent["SUBJECT"] || "" : ""}
               onChange={(e) => setSubject(e.target.value)}
               className="border border-border peer h-full w-full rounded bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 focus:border focus:border-border focus:border-t-transparent focus:outline-0"
             />
@@ -148,14 +184,20 @@ const SendEmailModal = ({
             </div>
 
             <Button
+              disabled={isPending}
               onClick={() => {
-                setIsSentEmailModalOpen(true);
-                setIsModalOpen(false);
+                handleSendEmail();
               }}
               className="flex items-center justify-center gap-[10px] w-full"
             >
-              <img src={send} alt="" />
-              Send Email
+              {isPending ? (
+                <PulseLoader color="#cdcfd1" size={6} />
+              ) : (
+                <>
+                  <img src={send} alt="" />
+                  Send Email
+                </>
+              )}
             </Button>
           </div>
         </div>

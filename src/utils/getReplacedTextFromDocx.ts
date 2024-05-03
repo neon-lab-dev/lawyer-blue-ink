@@ -2,7 +2,7 @@ import mammoth from "mammoth";
 import PizZip from "pizzip";
 import Docxtemplater from "docxtemplater";
 
-const replaceWordsInDocx = async (
+const getReplacedTextFromDocx = async (
   base64: string,
   replacements: {
     [oldWord: string]: string;
@@ -23,7 +23,6 @@ const replaceWordsInDocx = async (
   const doc = new Docxtemplater().loadZip(zip);
 
   // Perform the replacements
-
   const replacedData = Object.entries(replacements).reduce(
     (data, [oldWord, newWord]) => {
       //@ts-ignore
@@ -44,8 +43,20 @@ const replaceWordsInDocx = async (
 
   const output = await zipDoc.generate({ type: "base64" });
 
-  // Here you can return the base64 string, etc.
-  return output;
+  // Convert the base64 string of the replaced .docx file to a Uint8Array
+  const finalDocBinaryString = window.atob(output);
+  const finalDocLen = finalDocBinaryString.length;
+  const finalDocBytes = new Uint8Array(finalDocLen);
+  for (let i = 0; i < finalDocLen; i++) {
+    finalDocBytes[i] = finalDocBinaryString.charCodeAt(i);
+  }
+
+  // Use mammoth to extract the text from the replaced .docx file
+  const { value: text } = await mammoth.extractRawText({
+    arrayBuffer: finalDocBytes.buffer,
+  });
+
+  return text;
 };
 
-export default replaceWordsInDocx;
+export default getReplacedTextFromDocx;

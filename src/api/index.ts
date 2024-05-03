@@ -7,6 +7,8 @@ const API = {
   upload: BASE_URL + "/uploadPdf",
   all: BASE_URL + "/pdfs",
   pdf: BASE_URL + "/pdf",
+
+  send: BASE_URL + "/sendemail",
 };
 
 export default API;
