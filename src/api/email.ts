@@ -14,7 +14,7 @@ export const handSendEmail = async (data: {
   formData.append("cc", data.cc);
   formData.append("body", data.body);
   data.attachments.forEach((file) => {
-    formData.append("attachments", file);
+    formData.append("files", file);
   });
 
   return new Promise((resolve, reject) => {

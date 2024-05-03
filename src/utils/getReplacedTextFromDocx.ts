@@ -51,12 +51,12 @@ const getReplacedTextFromDocx = async (
     finalDocBytes[i] = finalDocBinaryString.charCodeAt(i);
   }
 
-  // Use mammoth to extract the text from the replaced .docx file
-  const { value: text } = await mammoth.extractRawText({
+  // Use mammoth to convert the .docx file to HTML
+  const { value: html } = await mammoth.convertToHtml({
     arrayBuffer: finalDocBytes.buffer,
   });
 
-  return text;
+  return html;
 };
 
 export default getReplacedTextFromDocx;

@@ -20,7 +20,6 @@ const ExcelSheet = ({
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isSentEmailModalOpen, setIsSentEmailModalOpen] = useState(false);
-  const [filePreview, setFilePreview] = useState<File | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [activeData, setActiveData] = useState<any>(null);
 
@@ -28,20 +27,11 @@ const ExcelSheet = ({
     fileInputRef.current?.click();
   };
 
-  useEffect(() => {
-    console.log(filePreview);
-  }, [filePreview]);
-
   const handleFileInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     if (!event.target.files) return;
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setFilePreview(reader.result as any);
-    };
-    reader.readAsDataURL(file);
+    setAttachedFiles([...event.target.files]);
   };
 
   // Modal functionality
@@ -49,8 +39,6 @@ const ExcelSheet = ({
     setIsModalOpen(!isModalOpen);
     setActiveData(excelFileDetails[i]);
   };
-
-  console.log(excelFileDetails);
 
   return (
     <>

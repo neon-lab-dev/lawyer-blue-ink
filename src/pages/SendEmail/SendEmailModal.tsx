@@ -28,7 +28,7 @@ const SendEmailModal = ({
   attachedFiles: File[];
 }): JSX.Element => {
   const [dataToSent, setDataToSent] = useState(activeData);
-  const [from, setFrom] = useState("tilak@gmail.com");
+  const [from, setFrom] = useState("rishiraj1096@gmail.com");
   const [subject, setSubject] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -41,11 +41,7 @@ const SendEmailModal = ({
   ) => {
     if (!event.target.files) return;
     const files = event.target.files;
-    if (attachedFiles.length > 0) {
-      setAttachedFiles([...attachedFiles, ...files]);
-    } else {
-      setAttachedFiles([...files]);
-    }
+    setAttachedFiles([...files]);
   };
 
   useEffect(() => {
@@ -60,6 +56,8 @@ const SendEmailModal = ({
     onSuccess: () => {
       setIsSentEmailModalOpen(true);
       setIsModalOpen(false);
+      setSubject("");
+      setAttachedFiles([]);
     },
   });
 
@@ -88,7 +86,11 @@ const SendEmailModal = ({
     <Modal
       showCloseButton={true}
       isOpen={isModalOpen}
-      onClose={() => setIsModalOpen(false)}
+      onClose={() => {
+        setIsModalOpen(false);
+        setSubject("");
+        setAttachedFiles([]);
+      }}
     >
       <div className="w-[977px] rounded p-6 h-[464px] mx-auto overflow-y-auto bg-white flex items-center gap-9 relative">
         <div className="w-[50%] flex flex-col gap-6">
@@ -97,6 +99,7 @@ const SendEmailModal = ({
               required
               type="text"
               placeholder="   "
+              disabled
               value={from}
               onChange={(e) => setFrom(e.target.value)}
               className="border border-border peer h-full w-full rounded bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 focus:border focus:border-border focus:border-t-transparent focus:outline-0"

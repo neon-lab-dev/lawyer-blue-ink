@@ -42,11 +42,7 @@ const TrademarkForm = ({
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files) return;
     const files = event.target.files;
-    if (attachedFiles.length > 0) {
-      setAttachedFiles([...attachedFiles, ...files]);
-    } else {
-      setAttachedFiles([...files]);
-    }
+    setAttachedFiles([...files]);
   };
 
   useEffect(() => {
