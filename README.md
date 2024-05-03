@@ -1,41 +1,24 @@
-# Lawyer Blue Ink.
+## Lawyer Blue Ink
 
-This project is created using Vite.js, React.js, and Tailwind CSS.
+- Email automation for lawyers
 
-# Deployment Links
+### Instruction for using
 
-- [Master](https://lawyer-blue-ink.vercel.app/)
-- [Develop](https://lawyer-blue-ink-git-develop-neon-lab-devs-projects.vercel.app/)
+- Create a excel file
+- Create a template in docx format
 
-## Local Setup
+### Adding placeholders in docx and replacing them with values from excel
 
-```bash
-# Install dependencies
-npm install
+- You need to add placeholders in docx file like `{CLIENT_NAME}` and it will be replaced with the value from excel file whose column name is `CLIENT_NAME`
+- Remember you can name your placeholders anything you want but it should be same as column name in excel file wrapped in `{}` with no extra spaces or anything.
+- You can add multiple placeholders in docx file and they will be replaced with values from excel file.
+- If you have a placeholder in docx file but you don't have a column in excel file with that name then it will be replaced with `undefined` in the final docx file. So make sure you have all the placeholders in docx file present in excel file.
+- While you can name your placeholders anything you want but it is recommended to name in `UPPERCASE` and `SNAKE_CASE` for distinguishing them from normal text and generally not recommended to use special characters like `@`, `#`, `$`,`'`, etc. in placeholders.
+- While you can specify the placeholders as you wish, but there are some placeholder that are constant and you need to add them in excel file exactly as they are. These are:
+  - `CC EMAILS` : This is a special placeholder that is used to add CC emails in the email. You can add multiple emails separated by comma `,` in the excel file.
+  - `CLIENT WHATSAPP NO` : This is a special placeholder that whatsapp number of the client.
+  - `CLIENT EMAIL ID` : This is a special placeholder that is used to add client email in the email.
 
-# Start the development server
-npm run dev
-```
+### Adding attachments in email
 
-## Branches
-
-- `master` - The main branch for deployment ie final code
-- `develop` - The main branch for development ie working code
-
-### Naming Convention for Branches
-
-- `feature/branch-name` - For new features
-- `bug/branch-name` - For bug fixes
-- `hotfix/branch-name` - For hotfixes
-- `chore/branch-name` - For regular maintenance
-- `fix/branch-name` - For fixes
-- etc
-
-## Commit Messages
-
-- `feat: commit message` - For new features
-- `fix: commit message` - For bug fixes
-- `docs: commit message` - For documentation changes
-- `style: commit message` - For changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)
-- `refactor: commit message` - For code changes that neither fixes a bug nor adds a feature
-- etc
+You can add attachments in the email while entering details manually or from table page or while sending email. You can add multiple attachments. It is recommended to add attachments while sending email as it is more user friendly.
