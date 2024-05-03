@@ -114,6 +114,7 @@ const ViewTemplate = () => {
                 });
               }}
               variant="secondary"
+              className="px-3 py-2 min-w-16"
             >
               No
             </Button>
@@ -125,6 +126,7 @@ const ViewTemplate = () => {
                   templateName: "",
                 });
               }}
+              className="px-3 py-2 min-w-24"
             >
               Confirm
             </Button>
