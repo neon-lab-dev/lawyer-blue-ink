@@ -1,19 +1,16 @@
 import Button from "@/components/reusable/Button";
-import task from '@/assets/images/task.svg';
+import task from "@/assets/images/task.svg";
 import arrowleft from "@/assets/images/arrow_back.svg";
+import { Link } from "react-router-dom";
 
-const FileUploadSuccess = () => {
-  const handleGoBack = () => {
-    window.history.back(); // Navigate to the previous page in the browser's history
-  };
-
+const FileUploadSuccess = ({ onBack }: { onBack: () => void }) => {
   return (
     <div>
       <div className="py-6">
         {/* Back Button */}
         <button
           className="rounded-[50%] bg-gray-100 p-2"
-          onClick={handleGoBack} // Trigger the browser's back navigation
+          onClick={onBack} // Trigger the browser's back navigation
         >
           <img src={arrowleft} alt="Go back" />
         </button>
@@ -28,7 +25,9 @@ const FileUploadSuccess = () => {
             />
             <span className="text-center">Template Uploaded Successfully</span>
             <div className="flex justify-center py-8">
-              <Button>Send Email</Button>
+              <Link to={"/send-email"}>
+                <Button>Send Email</Button>
+              </Link>
             </div>
           </div>
         </div>
