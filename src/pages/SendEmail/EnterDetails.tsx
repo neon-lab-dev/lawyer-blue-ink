@@ -48,8 +48,14 @@ const TrademarkForm = ({
   useEffect(() => {
     (async () => {
       const vars = await extractVariablesFromDocx(selectedTemplate);
-      const uniqueVars = [...new Set(vars)]; // Remove duplicates
+      const constantVars = [
+        "CC EMAILS",
+        "CLIENT WHATSAPP NO",
+        "CLIENT EMAIL ID",
+      ];
+      const uniqueVars = [...new Set([...constantVars, ...vars])]; // Remove duplicates
       setVars(uniqueVars);
+      console.log(uniqueVars);
     })();
   }, [selectedTemplate]);
 
@@ -73,9 +79,8 @@ const TrademarkForm = ({
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid grid-cols-2 gap-10 w-[998px] pt-6 m-1">
           {vars.map((variable, i) => (
-            <div className="flex flex-col">
+            <div key={i} className="flex flex-col">
               <input
-                key={i}
                 type="text"
                 placeholder={variable}
                 className="w-full border border-[#D0D0D0] p-4 rounded"

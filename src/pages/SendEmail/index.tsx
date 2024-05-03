@@ -48,6 +48,7 @@ const SendEmail = () => {
     return (
       <ExcelSheet
         setSelectedPage={setSelectedPage}
+        setExcelFileDetails={setExcelFileDetails}
         excelFileDetails={excelFileDetails}
         selectedTemplate={selectedTemplate}
         setAttachedFiles={setAttachedFiles}

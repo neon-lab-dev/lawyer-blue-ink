@@ -18,6 +18,7 @@ const SendEmailModal = ({
   selectedTemplate,
   attachedFiles,
   setAttachedFiles,
+  sendSuccess,
 }: {
   isModalOpen: boolean;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -26,6 +27,7 @@ const SendEmailModal = ({
   selectedTemplate: string;
   setAttachedFiles: React.Dispatch<any>;
   attachedFiles: File[];
+  sendSuccess: () => void;
 }): JSX.Element => {
   const [dataToSent, setDataToSent] = useState(activeData);
   const [from, setFrom] = useState("rishiraj1096@gmail.com");
@@ -58,12 +60,13 @@ const SendEmailModal = ({
       setIsModalOpen(false);
       setSubject("");
       setAttachedFiles([]);
+      sendSuccess();
     },
   });
 
   const handleSendEmail = async () => {
     if (
-      !dataToSent.hasOwnProperty("CLIENT'S EMAIL ID") ||
+      !dataToSent.hasOwnProperty("CLIENT EMAIL ID") ||
       !dataToSent.hasOwnProperty("CC EMAILS") ||
       !subject
     ) {
@@ -72,7 +75,7 @@ const SendEmailModal = ({
     }
     const body = await getReplacedTextFromDocx(selectedTemplate, dataToSent);
     const data = {
-      to: dataToSent["CLIENT'S EMAIL ID"],
+      to: dataToSent["CLIENT EMAIL ID"],
       cc: dataToSent["CC EMAILS"],
       subject,
       body,
@@ -115,11 +118,11 @@ const SendEmailModal = ({
                 required
                 placeholder="     "
                 type="text"
-                value={dataToSent ? dataToSent["CLIENT'S EMAIL ID"] : ""}
+                value={dataToSent ? dataToSent["CLIENT EMAIL ID"] : ""}
                 onChange={(e) => {
                   setDataToSent({
                     ...dataToSent,
-                    "CLIENT'S EMAIL ID": e.target.value,
+                    "CLIENT EMAIL ID": e.target.value,
                   });
                 }}
                 className="peer h-full w-full rounded bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 focus:border-t-transparent focus:outline-0"

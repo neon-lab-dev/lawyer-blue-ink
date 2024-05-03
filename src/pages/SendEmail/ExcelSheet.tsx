@@ -11,12 +11,14 @@ const ExcelSheet = ({
   selectedTemplate,
   attachedFiles,
   setAttachedFiles,
+  setExcelFileDetails,
 }: {
   setSelectedPage: React.Dispatch<React.SetStateAction<string>>;
   excelFileDetails: any[];
   selectedTemplate: string;
   setAttachedFiles: React.Dispatch<any>;
   attachedFiles: File[];
+  setExcelFileDetails: React.Dispatch<any>;
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isSentEmailModalOpen, setIsSentEmailModalOpen] = useState(false);
@@ -60,7 +62,10 @@ const ExcelSheet = ({
                 <tr className="text-text text-[14px] font-work-sans font-medium">
                   {Object.keys(excelFileDetails[0]).map(
                     (key: string, i: number) => (
-                      <th key={i} className="border px-3 py-4 min-w-fit">
+                      <th
+                        key={i}
+                        className="border px-3 py-4 min-w-fit truncate"
+                      >
                         {key}
                       </th>
                     )
@@ -75,7 +80,9 @@ const ExcelSheet = ({
                   ?.map((item: any, i: number) => (
                     <tr
                       key={i}
-                      className="text-gray text-[15px] font-work-sans font-normal"
+                      className={`text-gray text-[15px] font-work-sans font-normal ${
+                        item.isSent ? "bg-[#EEFFE5]" : ""
+                      }`}
                     >
                       {Object.keys(item).map((key: string, i: number) => (
                         <td
@@ -119,6 +126,17 @@ const ExcelSheet = ({
               activeData={activeData}
               setAttachedFiles={setAttachedFiles}
               attachedFiles={attachedFiles}
+              sendSuccess={() => {
+                setExcelFileDetails(
+                  excelFileDetails.map((item) => {
+                    if (JSON.stringify(item) === JSON.stringify(activeData)) {
+                      return { ...item, isSent: true };
+                    } else {
+                      return item;
+                    }
+                  })
+                );
+              }}
             />
           </div>
         ) : (

@@ -59,8 +59,8 @@ const SelectTemplate = ({
                 i === templates.length - 1 ? "border-b" : "border-y"
               }`}
             >
-              <span className="my-auto">{item._id}</span>
-              <span className="my-auto">{item.file_name}</span>
+              <span className="my-auto truncate">{item._id}</span>
+              <span className="my-auto truncate">{item.file_name}</span>
               <img
                 src={article}
                 alt={item.file_name}
