@@ -25,11 +25,10 @@ const Login = () => {
     formState: { errors },
   } = useForm<FormData>();
 
-
-  const handleLogin = (data: FormData) : void => {
+  const handleLogin = (data: FormData): void => {
     console.log(data);
-    navigate("/")
-  }
+    navigate("/");
+  };
   return (
     <div className="flex flex-col justify-center items-center h-screen bg-white border rounded-lg px-10">
       <div className="w-full md:w-[406px] flex flex-col gap-6 p-10 rounded-lg bg-white border border-[#E5E7EB]">
@@ -40,32 +39,35 @@ const Login = () => {
         </div>
 
         {/* Input fields and submit btn */}
-        <form onSubmit={handleSubmit(handleLogin)} className="flex flex-col gap-6">
-           
-            <div className="flex flex-col gap-1">
+        <form
+          onSubmit={handleSubmit(handleLogin)}
+          className="flex flex-col gap-6"
+        >
+          <div className="flex flex-col gap-1">
             <div className="relative flex gap-2 items-center bg-white border border-[#D0D0D0] rounded px-6 h-[64px] w-full">
               <input
                 className="w-full h-full focus:outline-none"
                 placeholder="User Id"
                 type="number"
-                {...register('email', { required: 'User Id required' })}
+                {...register("email", { required: "User Id required" })}
               />
-              
             </div>
-            {errors.email && <span className="text-rose-600 font-inter">{errors.email?.message}</span>}
-            </div>
+            {errors.email && (
+              <span className="text-rose-600 font-inter">
+                {errors.email?.message}
+              </span>
+            )}
+          </div>
 
-            
-
-            <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1">
             <div className="relative flex gap-2 items-center bg-white border border-[#D0D0D0] rounded px-6 h-[64px] w-full">
               <input
                 className="w-full h-full focus:outline-none"
                 placeholder="Password"
                 type={showPassword ? "text" : "password"}
-                {...register('password', { required: 'Password required' })}
+                {...register("password", { required: "Password required" })}
               />
-              
+
               <div
                 onClick={handlePasswordToggle}
                 className="absolute right-0 px-6 cursor-pointer"
@@ -77,10 +79,14 @@ const Login = () => {
                 )}
               </div>
             </div>
-            {errors.password && <span className="text-rose-600 font-lato">{errors.password?.message}</span>}
-            </div>
+            {errors.password && (
+              <span className="text-rose-600 font-lato">
+                {errors.password?.message}
+              </span>
+            )}
+          </div>
 
-            <Button className="mt-4">Login</Button>
+          <Button className="mt-4">Login</Button>
         </form>
       </div>
     </div>
