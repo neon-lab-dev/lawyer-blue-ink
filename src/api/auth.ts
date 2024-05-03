@@ -16,7 +16,7 @@ export const handleLogin = async (data: {
         }
       )
       .then((res) => {
-        resolve(res.data);
+        resolve(res.data?.user);
       })
       .catch((err) => {
         reject(err.response.data.message ?? "Something went wrong!");
