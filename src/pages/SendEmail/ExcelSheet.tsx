@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import attachFile from "../../assets/icons/attach_file.svg";
 import send from "../../assets/icons/send.svg";
 import SendEmailModal from "./SendEmailModal";
@@ -9,14 +9,19 @@ const ExcelSheet = ({
   setSelectedPage,
   excelFileDetails,
   selectedTemplate,
+  attachedFiles,
+  setAttachedFiles,
+  setExcelFileDetails,
 }: {
   setSelectedPage: React.Dispatch<React.SetStateAction<string>>;
   excelFileDetails: any[];
   selectedTemplate: string;
+  setAttachedFiles: React.Dispatch<any>;
+  attachedFiles: File[];
+  setExcelFileDetails: React.Dispatch<any>;
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isSentEmailModalOpen, setIsSentEmailModalOpen] = useState(false);
-  const [filePreview, setFilePreview] = useState<File | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [activeData, setActiveData] = useState<any>(null);
 
@@ -24,20 +29,11 @@ const ExcelSheet = ({
     fileInputRef.current?.click();
   };
 
-  useEffect(() => {
-    console.log(filePreview);
-  }, [filePreview]);
-
   const handleFileInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     if (!event.target.files) return;
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setFilePreview(reader.result as any);
-    };
-    reader.readAsDataURL(file);
+    setAttachedFiles([...event.target.files]);
   };
 
   // Modal functionality
@@ -45,8 +41,6 @@ const ExcelSheet = ({
     setIsModalOpen(!isModalOpen);
     setActiveData(excelFileDetails[i]);
   };
-
-  console.log(excelFileDetails);
 
   return (
     <>
@@ -68,7 +62,10 @@ const ExcelSheet = ({
                 <tr className="text-text text-[14px] font-work-sans font-medium">
                   {Object.keys(excelFileDetails[0]).map(
                     (key: string, i: number) => (
-                      <th key={i} className="border px-3 py-4 min-w-fit">
+                      <th
+                        key={i}
+                        className="border px-3 py-4 min-w-fit truncate"
+                      >
                         {key}
                       </th>
                     )
@@ -83,7 +80,9 @@ const ExcelSheet = ({
                   ?.map((item: any, i: number) => (
                     <tr
                       key={i}
-                      className="text-gray text-[15px] font-work-sans font-normal"
+                      className={`text-gray text-[15px] font-work-sans font-normal ${
+                        item.isSent ? "bg-[#EEFFE5]" : ""
+                      }`}
                     >
                       {Object.keys(item).map((key: string, i: number) => (
                         <td
@@ -125,6 +124,19 @@ const ExcelSheet = ({
               setIsSentEmailModalOpen={setIsSentEmailModalOpen}
               selectedTemplate={selectedTemplate}
               activeData={activeData}
+              setAttachedFiles={setAttachedFiles}
+              attachedFiles={attachedFiles}
+              sendSuccess={() => {
+                setExcelFileDetails(
+                  excelFileDetails.map((item) => {
+                    if (JSON.stringify(item) === JSON.stringify(activeData)) {
+                      return { ...item, isSent: true };
+                    } else {
+                      return item;
+                    }
+                  })
+                );
+              }}
             />
           </div>
         ) : (

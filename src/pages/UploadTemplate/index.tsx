@@ -33,14 +33,18 @@ const Home = () => {
 
   // Check if there's an acceptable document in the uploaded files
   const validFile = uploadedFiles.find((file) => {
-    console.log("File type:", file.type); // Debugging
     return acceptableFileTypes.includes(file.type);
   });
 
   return (
     <div className="p-3">
       {isFileUploaded ? (
-        <FileUploadSuccess />
+        <FileUploadSuccess
+          onBack={() => {
+            setIsFileUploaded(false);
+            setShowUploadArea(true);
+          }}
+        />
       ) : (
         <>
           {showUploadArea ? (
@@ -48,19 +52,37 @@ const Home = () => {
               <FileDrop onFilesUpload={handleFilesUpload} />
 
               <div className="flex justify-end w-[850px]">
-                <Button onClick={handleProceed}>Proceed</Button>
+                <Button
+                  disabled={uploadedFiles.length === 0 || !validFile}
+                  onClick={handleProceed}
+                >
+                  Proceed
+                </Button>
               </div>
             </>
           ) : validFile ? (
             <FilePreview
-              onBack={() => setShowUploadArea(true)}
+              onBack={() => {
+                setShowUploadArea(true);
+                setUploadedFiles([]);
+              }}
               docFile={validFile}
               templateName={templateName}
               setTemplateName={setTemplateName}
               onSaveAndUpload={handleSaveAndUpload}
             />
           ) : (
-            <p>No valid document file uploaded</p> // If no valid document is found
+            <div className="text-red-600">
+              No acceptable document file provided.
+              <Button
+                onClick={() => {
+                  setShowUploadArea(true);
+                  setUploadedFiles([]);
+                }}
+              >
+                Go back
+              </Button>
+            </div>
           )}
         </>
       )}

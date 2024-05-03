@@ -1,13 +1,14 @@
 import { useState } from "react";
 import SelectTemplate from "./SelectTemplate";
 import SelectedTemplate from "./TemplateSelected";
-import EmterDetails from "./EnterDetails";
+import EnterDetails from "./EnterDetails";
 import ExcelSheet from "./ExcelSheet";
 
 const SendEmail = () => {
   const [selectedPage, setSelectedPage] = useState("select-template");
   const [selectedTemplate, setSelectedTemplate] = useState<string>("");
   const [selectedTemplateName, setSelectedTemplateName] = useState<string>("");
+  const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
   //@ts-ignore
   const [excelFileDetails, setExcelFileDetails] = useState<any>([]);
 
@@ -32,15 +33,26 @@ const SendEmail = () => {
     );
   }
   if (selectedPage === "enter-details") {
-    return <EmterDetails />;
+    return (
+      <EnterDetails
+        selectedTemplate={selectedTemplate}
+        setExcelFileDetails={setExcelFileDetails}
+        setSelectedPage={setSelectedPage}
+        setAttachedFiles={setAttachedFiles}
+        attachedFiles={attachedFiles}
+      />
+    );
   }
 
   if (selectedPage === "excel-sheet") {
     return (
       <ExcelSheet
         setSelectedPage={setSelectedPage}
+        setExcelFileDetails={setExcelFileDetails}
         excelFileDetails={excelFileDetails}
         selectedTemplate={selectedTemplate}
+        setAttachedFiles={setAttachedFiles}
+        attachedFiles={attachedFiles}
       />
     );
   }

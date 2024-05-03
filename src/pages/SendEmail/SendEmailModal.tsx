@@ -4,6 +4,11 @@ import attachFile from "../../assets/icons/attach_file.svg";
 import Modal from "@/components/reusable/Modal";
 import { useEffect, useRef, useState } from "react";
 import DocxWithReplacedText from "./DocxWithReplacedText";
+import { useMutation } from "@tanstack/react-query";
+import { handSendEmail } from "@/api/email";
+import toast from "react-hot-toast";
+import { PulseLoader } from "react-spinners";
+import getReplacedTextFromDocx from "@/utils/getReplacedTextFromDocx";
 
 const SendEmailModal = ({
   isModalOpen,
@@ -11,17 +16,22 @@ const SendEmailModal = ({
   setIsSentEmailModalOpen,
   activeData,
   selectedTemplate,
+  attachedFiles,
+  setAttachedFiles,
+  sendSuccess,
 }: {
   isModalOpen: boolean;
   setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setIsSentEmailModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
   activeData: any;
   selectedTemplate: string;
+  setAttachedFiles: React.Dispatch<any>;
+  attachedFiles: File[];
+  sendSuccess: () => void;
 }): JSX.Element => {
   const [dataToSent, setDataToSent] = useState(activeData);
-  const [from, setFrom] = useState("tilak@gmail.com");
+  const [from, setFrom] = useState("rishiraj1096@gmail.com");
   const [subject, setSubject] = useState("");
-  const [files, setFiles] = useState<File[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleAttachFileClick = () => {
@@ -32,24 +42,58 @@ const SendEmailModal = ({
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     if (!event.target.files) return;
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      //convert to base64 and store in state
-      setFiles([...files, file]);
-    };
-    reader.readAsDataURL(file);
+    const files = event.target.files;
+    setAttachedFiles([...files]);
   };
 
   useEffect(() => {
     setDataToSent(activeData);
   }, [activeData]);
 
+  const { mutate, isPending } = useMutation({
+    mutationFn: handSendEmail,
+    onError: (error: string) => {
+      toast.error(error);
+    },
+    onSuccess: () => {
+      setIsSentEmailModalOpen(true);
+      setIsModalOpen(false);
+      setSubject("");
+      setAttachedFiles([]);
+      sendSuccess();
+    },
+  });
+
+  const handleSendEmail = async () => {
+    if (
+      !dataToSent.hasOwnProperty("CLIENT EMAIL ID") ||
+      !dataToSent.hasOwnProperty("CC EMAILS") ||
+      !subject
+    ) {
+      toast.error("Please fill all the fields");
+      return;
+    }
+    const body = await getReplacedTextFromDocx(selectedTemplate, dataToSent);
+    const data = {
+      to: dataToSent["CLIENT EMAIL ID"],
+      cc: dataToSent["CC EMAILS"],
+      subject,
+      body,
+      attachments: attachedFiles,
+    };
+
+    mutate(data);
+  };
+
   return (
     <Modal
       showCloseButton={true}
       isOpen={isModalOpen}
-      onClose={() => setIsModalOpen(false)}
+      onClose={() => {
+        setIsModalOpen(false);
+        setSubject("");
+        setAttachedFiles([]);
+      }}
     >
       <div className="w-[977px] rounded p-6 h-[464px] mx-auto overflow-y-auto bg-white flex items-center gap-9 relative">
         <div className="w-[50%] flex flex-col gap-6">
@@ -58,6 +102,7 @@ const SendEmailModal = ({
               required
               type="text"
               placeholder="   "
+              disabled
               value={from}
               onChange={(e) => setFrom(e.target.value)}
               className="border border-border peer h-full w-full rounded bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 focus:border focus:border-border focus:border-t-transparent focus:outline-0"
@@ -73,11 +118,11 @@ const SendEmailModal = ({
                 required
                 placeholder="     "
                 type="text"
-                value={dataToSent ? dataToSent["CLIENT'S EMAIL ID"] : ""}
+                value={dataToSent ? dataToSent["CLIENT EMAIL ID"] : ""}
                 onChange={(e) => {
                   setDataToSent({
                     ...dataToSent,
-                    "CLIENT'S EMAIL ID": e.target.value,
+                    "CLIENT EMAIL ID": e.target.value,
                   });
                 }}
                 className="peer h-full w-full rounded bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 focus:border-t-transparent focus:outline-0"
@@ -126,7 +171,7 @@ const SendEmailModal = ({
           <div className="flex items-center gap-9">
             <div className="border rounded border-border w-[50px]  flex flex-col">
               <div className="h-[28px] bg-white text-text text-[14px] font-work-sans font-medium flex justify-center items-center">
-                {files.length}
+                {attachedFiles.length}
               </div>
 
               <input
@@ -145,14 +190,20 @@ const SendEmailModal = ({
             </div>
 
             <Button
+              disabled={isPending}
               onClick={() => {
-                setIsSentEmailModalOpen(true);
-                setIsModalOpen(false);
+                handleSendEmail();
               }}
               className="flex items-center justify-center gap-[10px] w-full"
             >
-              <img src={send} alt="" />
-              Send Email
+              {isPending ? (
+                <PulseLoader color="#cdcfd1" size={6} />
+              ) : (
+                <>
+                  <img src={send} alt="" />
+                  Send Email
+                </>
+              )}
             </Button>
           </div>
         </div>
