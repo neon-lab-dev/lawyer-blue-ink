@@ -3,6 +3,10 @@ const API = {
   login: BASE_URL + "/login",
   me: BASE_URL + "/me",
   logout: BASE_URL + "/logout",
+
+  upload: BASE_URL + "/uploadPdf",
+  all: BASE_URL + "/pdfs",
+  pdf: BASE_URL + "/pdf",
 };
 
 export default API;

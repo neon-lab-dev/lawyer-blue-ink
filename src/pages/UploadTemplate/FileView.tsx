@@ -2,6 +2,10 @@ import { useEffect, useState, ChangeEvent } from "react";
 import { renderAsync } from "docx-preview";
 import Button from "@/components/reusable/Button";
 import arrowleft from "@/assets/images/arrow_back.svg";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { handleUploadTemplate } from "@/api/template";
+import toast from "react-hot-toast";
+import { PulseLoader } from "react-spinners";
 
 interface FilePreviewProps {
   docFile: File | null;
@@ -48,6 +52,22 @@ const FilePreview = ({
     }
   }, [docFile]);
 
+  const queryClient = useQueryClient();
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: handleUploadTemplate,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["templates"],
+      });
+      onSaveAndUpload();
+      toast.success("Template uploaded successfully.");
+    },
+    onError: (error: string) => {
+      toast.error(error);
+    },
+  });
+
   return (
     <div className="scrollbar-thin overflow-hidden">
       <div className="py-3 flex justify-between items-center">
@@ -79,7 +99,23 @@ const FilePreview = ({
                 className="w-[360px] h-[16px] border border-gray-800 rounded-lg p-4"
               />
               <div className="flex justify-end">
-                <Button onClick={onSaveAndUpload}>Save and Upload</Button>
+                <Button
+                  disabled={isPending || !templateName}
+                  onClick={() => {
+                    if (!docFile) toast.error("No document file provided.");
+                    else
+                      mutate({
+                        file: docFile,
+                        file_name: templateName,
+                      });
+                  }}
+                >
+                  {isPending ? (
+                    <PulseLoader color="#cdcfd1" size={6} />
+                  ) : (
+                    "Save & Upload"
+                  )}
+                </Button>
               </div>
             </div>
           </div>

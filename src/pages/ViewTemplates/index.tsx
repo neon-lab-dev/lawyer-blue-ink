@@ -1,19 +1,59 @@
 import article from "@/assets/icons/article.svg";
 import Button from "@/components/reusable/Button";
 import deleteIcon from "@/assets/icons/delete.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Modal from "@/components/reusable/Modal";
-import { templates } from "@/assets/mockData/templates";
 import DocxPreview from "@/components/reusable/DocxPreview";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { handleDeleteTemplate, handleGetTemplates } from "@/api/template";
+import { ITemplate } from "@/types/template.type";
+import toast from "react-hot-toast";
+import { PulseLoader } from "react-spinners";
 
 const ViewTemplate = () => {
+  const queryClient = useQueryClient();
   const [selectedTemplate, setSelectedTemplate] = useState<string>("");
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [templates, setTemplates] = useState<ITemplate[]>([]);
+
   const [deleteModal, setDeleteModal] = useState({
     isOpen: false,
     id: "",
     templateName: "",
   });
+
+  const { data, isLoading, isError } = useQuery<ITemplate[]>({
+    queryFn: handleGetTemplates,
+    queryKey: ["templates"],
+  });
+
+  useEffect(() => {
+    if (data) {
+      setTemplates(data);
+    }
+  }, [data]);
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: handleDeleteTemplate,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["templates"],
+      });
+      toast.success("Template deleted successfully");
+      setDeleteModal({
+        isOpen: false,
+        id: "",
+        templateName: "",
+      });
+      setSelectedTemplate("");
+    },
+    onError: (error: string) => {
+      toast.error(error);
+    },
+  });
+
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>Error fetching templates</div>;
 
   return (
     <>
@@ -31,44 +71,50 @@ const ViewTemplate = () => {
               )
             )}
           </div>
-          {templates.map((item, i) => (
-            <div
-              key={i}
-              className={`rounded-t-[4px] text-gray grid grid-cols-4 border-x text-[14px] border-gray/10 font-medium p-[20px] pl-[60px] ${
-                i === templates.length - 1 ? "border-b" : "border-y"
-              }`}
-            >
-              <span className="my-auto">{item._id}</span>
-              <span className="my-auto">{item.name}</span>
-              <img
-                src={article}
-                alt={item.name}
-                className="h-[100px] my-auto w-[100px] aspect-square object-contain object-center"
-              />
-              <div className="flex items-center my-auto gap-12">
-                <Button
-                  onClick={() => {
-                    setIsPreviewOpen(true);
-                    setSelectedTemplate(item.template ?? "");
-                  }}
-                  variant="supportive"
-                >
-                  View
-                </Button>
-                <button
-                  onClick={() => {
-                    setDeleteModal({
-                      isOpen: true,
-                      id: item._id,
-                      templateName: item.name,
-                    });
-                  }}
-                >
-                  <img src={deleteIcon} className="h-6 w-6" alt="delete" />
-                </button>
+          {templates.length > 0 ? (
+            templates.map((item, i) => (
+              <div
+                key={i}
+                className={`rounded-t-[4px] text-gray grid grid-cols-4 border-x text-[14px] border-gray/10 font-medium p-[20px] pl-[60px] ${
+                  i === templates.length - 1 ? "border-b" : "border-y"
+                }`}
+              >
+                <span className="my-auto">{item._id}</span>
+                <span className="my-auto">{item.file_name}</span>
+                <img
+                  src={article}
+                  alt={item.file_name}
+                  className="h-[100px] my-auto w-[100px] aspect-square object-contain object-center"
+                />
+                <div className="flex items-center my-auto gap-12">
+                  <Button
+                    onClick={() => {
+                      setIsPreviewOpen(true);
+                      setSelectedTemplate(item.data ?? "");
+                    }}
+                    variant="supportive"
+                  >
+                    View
+                  </Button>
+                  <button
+                    onClick={() => {
+                      setDeleteModal({
+                        isOpen: true,
+                        id: item._id,
+                        templateName: item.file_name,
+                      });
+                    }}
+                  >
+                    <img src={deleteIcon} className="h-6 w-6" alt="delete" />
+                  </button>
+                </div>
               </div>
+            ))
+          ) : (
+            <div className="text-center text-text text-[16px] mt-12">
+              No templates found
             </div>
-          ))}
+          )}
         </div>
       </div>
       {/* preview image modal */}
@@ -112,6 +158,7 @@ const ViewTemplate = () => {
                   id: "",
                   templateName: "",
                 });
+                setSelectedTemplate("");
               }}
               variant="secondary"
               className="px-3 py-2 min-w-16"
@@ -120,15 +167,11 @@ const ViewTemplate = () => {
             </Button>
             <Button
               onClick={() => {
-                setDeleteModal({
-                  isOpen: false,
-                  id: "",
-                  templateName: "",
-                });
+                mutate(deleteModal.id);
               }}
               className="px-3 py-2 min-w-24"
             >
-              Confirm
+              {isPending ? <PulseLoader color="#cdcfd1" size={6} /> : "Confirm"}
             </Button>
           </div>
         </div>
