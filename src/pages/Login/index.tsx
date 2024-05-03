@@ -32,18 +32,18 @@ const Login = () => {
 
   const { mutate, isPending } = useMutation({
     mutationFn: handleLogin,
-    onSuccess: () => {
+    onSuccess: (user) => {
+      toast.success("Login successful, Redirecting...");
       queryClient
         .invalidateQueries({
           queryKey: ["me"],
         })
-        .then((user) => {
+        .then(() => {
           //@ts-ignore
           if (user.role !== "admin") {
             toast.error("You are not authorized to access this page");
           } else {
             navigate("/");
-            toast.success("Login successful");
           }
         });
     },
