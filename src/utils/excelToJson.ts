@@ -21,7 +21,25 @@ const excelToJson = (file: Blob) => {
           }
           return obj;
         });
-        resolve(result.filter((item) => item));
+        const truthyResult = result.filter((item) => Boolean(item));
+
+        // convert every value to string according to the requirement
+        const finalResult = truthyResult.map((item) => {
+          const obj: any = {};
+          Object.keys(item).forEach((key) => {
+            const val = item[key];
+            if (val === null || val === undefined) return (obj[key] = "");
+            if (typeof val === "object") {
+              obj[key] = val.toString();
+            } else if (Array.isArray(val)) {
+              obj[key] = val.join(",");
+            } else {
+              obj[key] = String(val);
+            }
+          });
+          return obj;
+        });
+        resolve(finalResult);
       });
     };
     fileReader.onerror = (e) => {
