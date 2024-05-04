@@ -80,13 +80,25 @@ const TrademarkForm = () => {
           "CLIENT EMAIL ID",
         ];
         const uniqueVars = [...new Set([...constantVars, ...vars])]; // Remove duplicates
+
+        // Check for unsafe characters
+        const unsafeVar = uniqueVars.find((variable) =>
+          /[^a-zA-Z0-9 ]/.test(variable)
+        );
+        if (unsafeVar) {
+          throw new Error(
+            `Variable "${unsafeVar}" contains unsafe characters.`
+          );
+        }
+
         setVars(uniqueVars);
         console.log(uniqueVars);
       } catch (error) {
         setError({
           isError: true,
           message:
-            "Error extracting variables from the template, Check the placeholder variables in the template. Try adding the placeholder variables as mentioned.",
+            String(error) +
+            " Error extracting variables from the template, Check the placeholder variables in the template. Try adding the placeholder variables as mentioned.",
         });
       }
     })();
@@ -125,7 +137,7 @@ const TrademarkForm = () => {
                 <div key={i} className="flex flex-col">
                   <input
                     type="text"
-                    placeholder={variable}
+                    placeholder={variable.replace(/_/g, " ")}
                     className="w-full border border-[#D0D0D0] p-4 rounded"
                     {...register(variable, {
                       required: {
