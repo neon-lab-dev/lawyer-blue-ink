@@ -2,87 +2,93 @@ import Button from "@/components/reusable/Button";
 import send from "../../assets/icons/sendwhite.svg";
 import attachFile from "../../assets/icons/attach_file.svg";
 import Modal from "@/components/reusable/Modal";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import DocxWithReplacedText from "./DocxWithReplacedText";
 import { useMutation } from "@tanstack/react-query";
-import { handSendEmail } from "@/api/email";
+import { handleSendEmail } from "@/api/email";
 import toast from "react-hot-toast";
 import { PulseLoader } from "react-spinners";
 import getReplacedTextFromDocx from "@/utils/getReplacedTextFromDocx";
+import { useAppSelector } from "@/store";
+import { useDispatch } from "react-redux";
+import { setExcelData } from "@/store/slices/templates";
+
+type Props = {
+  isModalOpen: boolean;
+  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  dataToSent: any;
+  handleFileInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  setIsSentEmailModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  index: number;
+};
 
 const SendEmailModal = ({
   isModalOpen,
   setIsModalOpen,
+  handleFileInputChange,
+  dataToSent,
   setIsSentEmailModalOpen,
-  activeData,
-  selectedTemplate,
-  attachedFiles,
-  setAttachedFiles,
-  sendSuccess,
-}: {
-  isModalOpen: boolean;
-  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setIsSentEmailModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  activeData: any;
-  selectedTemplate: string;
-  setAttachedFiles: React.Dispatch<any>;
-  attachedFiles: File[];
-  sendSuccess: () => void;
-}): JSX.Element => {
-  const [dataToSent, setDataToSent] = useState(activeData);
+  index,
+}: Props): JSX.Element => {
   const [from, setFrom] = useState("rishiraj1096@gmail.com");
   const [subject, setSubject] = useState("");
+  const dispatch = useDispatch();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { attachedFiles, selectedTemplateId, availableTemplates, excelData } =
+    useAppSelector((state) => state.templates);
 
   const handleAttachFileClick = () => {
     fileInputRef.current?.click();
   };
 
-  const handleFileInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    if (!event.target.files) return;
-    const files = event.target.files;
-    setAttachedFiles([...files]);
-  };
-
-  useEffect(() => {
-    setDataToSent(activeData);
-  }, [activeData]);
-
   const { mutate, isPending } = useMutation({
-    mutationFn: handSendEmail,
-    onError: (error: string) => {
-      toast.error(error);
+    mutationFn: handleSendEmail,
+    onError: (error) => {
+      console.log(error);
+      if (typeof error === "string") toast.error(error);
+      else toast.error("Error sending email");
     },
     onSuccess: () => {
       setIsSentEmailModalOpen(true);
       setIsModalOpen(false);
       setSubject("");
-      setAttachedFiles([]);
-      sendSuccess();
+      handleExcelDataChange("isSent", true);
     },
   });
 
-  const handleSendEmail = async () => {
+  const onSubmit = async () => {
     if (
-      !dataToSent.hasOwnProperty("CLIENT EMAIL ID") ||
-      !dataToSent.hasOwnProperty("CC EMAILS") ||
+      !dataToSent["CLIENT EMAIL ID"] ||
+      !dataToSent["CC EMAILS"] ||
       !subject
     ) {
       toast.error("Please fill all the fields");
       return;
     }
-    const body = await getReplacedTextFromDocx(selectedTemplate, dataToSent);
+    const selectedTemplate = availableTemplates.find(
+      (template) => template._id === selectedTemplateId
+    )!;
+    const body = await getReplacedTextFromDocx(
+      selectedTemplate.data,
+      dataToSent
+    );
     const data = {
       to: dataToSent["CLIENT EMAIL ID"],
       cc: dataToSent["CC EMAILS"],
       subject,
       body,
-      attachments: attachedFiles,
+      attachments: attachedFiles?.find(
+        (file) => file.indexOfExcelSheet === index
+      )?.files as File[],
     };
-
     mutate(data);
+  };
+
+  const handleExcelDataChange = (key: string, value: string | boolean) => {
+    const newData = { ...dataToSent, [key]: value };
+    const newExcelData = [...excelData];
+    newExcelData[index] = newData;
+    dispatch(setExcelData(newExcelData));
   };
 
   return (
@@ -92,7 +98,6 @@ const SendEmailModal = ({
       onClose={() => {
         setIsModalOpen(false);
         setSubject("");
-        setAttachedFiles([]);
       }}
     >
       <div className="w-[977px] rounded p-6 h-[464px] mx-auto overflow-y-auto bg-white flex items-center gap-9 relative">
@@ -120,10 +125,7 @@ const SendEmailModal = ({
                 type="text"
                 value={dataToSent ? dataToSent["CLIENT EMAIL ID"] : ""}
                 onChange={(e) => {
-                  setDataToSent({
-                    ...dataToSent,
-                    "CLIENT EMAIL ID": e.target.value,
-                  });
+                  handleExcelDataChange("CLIENT EMAIL ID", e.target.value);
                 }}
                 className="peer h-full w-full rounded bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 focus:border-t-transparent focus:outline-0"
               />
@@ -141,10 +143,7 @@ const SendEmailModal = ({
                 placeholder="     "
                 value={dataToSent ? dataToSent["CC EMAILS"] : ""}
                 onChange={(e) => {
-                  setDataToSent({
-                    ...dataToSent,
-                    "CC EMAILS": e.target.value,
-                  });
+                  handleExcelDataChange("CC EMAILS", e.target.value);
                 }}
                 className="peer h-full w-full rounded bg-transparent px-3 py-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 focus:border-t-transparent focus:outline-0"
               />
@@ -171,7 +170,14 @@ const SendEmailModal = ({
           <div className="flex items-center gap-9">
             <div className="border rounded border-border w-[50px]  flex flex-col">
               <div className="h-[28px] bg-white text-text text-[14px] font-work-sans font-medium flex justify-center items-center">
-                {attachedFiles.length}
+                {(() => {
+                  let len = 0;
+                  const files = attachedFiles?.find(
+                    (file) => file.indexOfExcelSheet === index
+                  )?.files;
+                  len = files ? files.length : 0;
+                  return len;
+                })()}
               </div>
 
               <input
@@ -192,7 +198,7 @@ const SendEmailModal = ({
             <Button
               disabled={isPending}
               onClick={() => {
-                handleSendEmail();
+                onSubmit();
               }}
               className="flex items-center justify-center gap-[10px] w-full"
             >
@@ -214,7 +220,12 @@ const SendEmailModal = ({
           </h1>
           <DocxWithReplacedText
             data={dataToSent}
-            selectedTemplate={selectedTemplate}
+            selectedTemplate={
+              availableTemplates.find(
+                (template) => template._id === selectedTemplateId
+              )?.data
+            }
+            id={`docx-preview-${index}`}
           />
         </div>
       </div>

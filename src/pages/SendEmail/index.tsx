@@ -1,60 +1,62 @@
-import { useState } from "react";
+import { useEffect} from "react";
 import SelectTemplate from "./SelectTemplate";
 import SelectedTemplate from "./TemplateSelected";
 import EnterDetails from "./EnterDetails";
 import ExcelSheet from "./ExcelSheet";
+import { useLocation, useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { ITemplate } from "@/types/template.type";
+import { handleGetTemplates } from "@/api/template";
+import Loading from "@/components/reusable/Loading";
+import { useDispatch } from "react-redux";
+import {
+  clearAttachedFiles,
+  setAvailableTemplates,
+} from "@/store/slices/templates";
+
+export type AttachedFiles = {
+  templateId: string;
+  files: File[];
+}[];
 
 const SendEmail = () => {
-  const [selectedPage, setSelectedPage] = useState("select-template");
-  const [selectedTemplate, setSelectedTemplate] = useState<string>("");
-  const [selectedTemplateName, setSelectedTemplateName] = useState<string>("");
-  const [attachedFiles, setAttachedFiles] = useState<File[]>([]);
-  //@ts-ignore
-  const [excelFileDetails, setExcelFileDetails] = useState<any>([]);
+  const dispatch = useDispatch();
+  const { tab } = useParams();
+  const { pathname } = useLocation();
 
-  if (selectedPage === "select-template") {
-    return (
-      <SelectTemplate
-        setSelectedPage={setSelectedPage}
-        setSelectedTemplate={setSelectedTemplate}
-        setSelectedTemplateName={setSelectedTemplateName}
-      />
-    );
+  const { data, isLoading, isError } = useQuery<ITemplate[]>({
+    queryFn: handleGetTemplates,
+    queryKey: ["templates"],
+  });
+
+  useEffect(() => {
+    if (data) {
+      dispatch(setAvailableTemplates(data));
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (pathname.split("/").length !== 3) {
+      dispatch(clearAttachedFiles());
+    }
+  }, [pathname]);
+
+  if (isLoading) return <Loading />;
+  if (isError) return <div>Error fetching templates</div>;
+
+  if (!tab) {
+    return <SelectTemplate templates={data!} />;
   }
 
-  if (selectedPage === "template-selected") {
-    return (
-      <SelectedTemplate
-        setSelectedPage={setSelectedPage}
-        selectedTemplate={selectedTemplate}
-        setExcelFileDetails={setExcelFileDetails}
-        selectedTemplateName={selectedTemplateName}
-      />
-    );
+  if (tab === "template-selected") {
+    return <SelectedTemplate />;
   }
-  if (selectedPage === "enter-details") {
-    return (
-      <EnterDetails
-        selectedTemplate={selectedTemplate}
-        setExcelFileDetails={setExcelFileDetails}
-        setSelectedPage={setSelectedPage}
-        setAttachedFiles={setAttachedFiles}
-        attachedFiles={attachedFiles}
-      />
-    );
+  if (tab === "enter-details") {
+    return <EnterDetails />;
   }
 
-  if (selectedPage === "excel-sheet") {
-    return (
-      <ExcelSheet
-        setSelectedPage={setSelectedPage}
-        setExcelFileDetails={setExcelFileDetails}
-        excelFileDetails={excelFileDetails}
-        selectedTemplate={selectedTemplate}
-        setAttachedFiles={setAttachedFiles}
-        attachedFiles={attachedFiles}
-      />
-    );
+  if (tab === "excel-sheet") {
+    return <ExcelSheet />;
   }
 };
 export default SendEmail;

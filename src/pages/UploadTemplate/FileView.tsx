@@ -62,6 +62,7 @@ const FilePreview = ({
       });
       onSaveAndUpload();
       toast.success("Template uploaded successfully.");
+      setTemplateName("");
     },
     onError: (error: string) => {
       toast.error(error);

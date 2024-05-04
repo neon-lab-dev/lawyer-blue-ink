@@ -5,11 +5,13 @@ import { useEffect, useState } from "react";
 const DocxWithReplacedText = ({
   selectedTemplate,
   data,
+  id = "docx-preview-container",
 }: {
   selectedTemplate: string;
   data: {
     [key: string]: string;
   };
+  id?: string;
 }) => {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -18,7 +20,7 @@ const DocxWithReplacedText = ({
       setIsLoading(true);
       const replaced = await replaceWordsInDocx(selectedTemplate, data);
       setIsLoading(false);
-      const el = document.getElementById("docx-preview-container");
+      const el = document.getElementById(id);
       const binaryString = window.atob(replaced);
       const binaryLen = binaryString.length;
       const bytes = new Uint8Array(binaryLen);
@@ -56,7 +58,7 @@ const DocxWithReplacedText = ({
   return (
     <div>
       {isLoading && <div>Loading...</div>}
-      <div id="docx-preview-container"></div>
+      <div id={id}></div>
     </div>
   );
 };

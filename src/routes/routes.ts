@@ -18,6 +18,10 @@ const ROUTES: IRoute[] = [
     component: lazy(async () => await import("@/pages/SendEmail")),
   },
   {
+    path: "/send-email/:tab",
+    component: lazy(async () => await import("@/pages/SendEmail")),
+  },
+  {
     path: "/view-templates",
     component: lazy(async () => await import("@/pages/ViewTemplates")),
   },
@@ -31,15 +35,21 @@ const ROUTES: IRoute[] = [
   },
   {
     path: "fileupload",
-    component: lazy(async () => await import("@/pages/UploadTemplate/FileUpload")),
+    component: lazy(
+      async () => await import("@/pages/UploadTemplate/FileUpload")
+    ),
   },
   {
     path: "filepreview",
-    component: lazy(async () => await import("@/pages/UploadTemplate/FileView")),
+    component: lazy(
+      async () => await import("@/pages/UploadTemplate/FileView")
+    ),
   },
   {
     path: "filesuccesful",
-    component: lazy(async () => await import("@/pages/UploadTemplate/FileSucessful")),
+    component: lazy(
+      async () => await import("@/pages/UploadTemplate/FileSucessful")
+    ),
   },
 ];
 
