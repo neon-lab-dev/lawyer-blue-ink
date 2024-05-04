@@ -42,7 +42,7 @@ export const handleGetMe = async (): Promise<IUser> => {
 export const handleLogout = async () => {
   return new Promise((resolve, reject) => {
     axios
-      .post(API.logout, {
+      .get(API.logout, {
         withCredentials: true,
       })
       .then((res) => {
