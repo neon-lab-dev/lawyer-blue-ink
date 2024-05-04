@@ -136,6 +136,7 @@ const TrademarkForm = () => {
               {vars.map((variable, i) => (
                 <div key={i} className="flex flex-col">
                   <input
+                    key={i}
                     type="text"
                     placeholder={variable.replace(/_/g, " ")}
                     className="w-full border border-[#D0D0D0] p-4 rounded"

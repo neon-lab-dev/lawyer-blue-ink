@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect} from "react";
 import SelectTemplate from "./SelectTemplate";
 import SelectedTemplate from "./TemplateSelected";
 import EnterDetails from "./EnterDetails";
