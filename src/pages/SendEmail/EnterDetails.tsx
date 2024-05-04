@@ -98,7 +98,7 @@ const TrademarkForm = () => {
           isError: true,
           message:
             String(error) +
-            " Error extracting variables from the template, Check the placeholder variables in the template. Try adding the placeholder variables as mentioned.",
+            " Error extracting variables from the template, Check the placeholder variables in the template. Try adding the placeholder variables without special characters.",
         });
       }
     })();
