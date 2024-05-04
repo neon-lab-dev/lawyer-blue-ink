@@ -19,6 +19,7 @@ const RootLayout = (props: Props) => {
     queryFn: handleGetMe,
     retry: 0,
     staleTime: Infinity,
+    refetchOnWindowFocus: false,
   });
 
   // does not support mobile devices
