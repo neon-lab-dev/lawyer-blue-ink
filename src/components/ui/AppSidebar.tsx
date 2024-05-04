@@ -47,7 +47,11 @@ const AppSidebar = () => {
               key={index}
               to={link.path}
               className={`flex items-center gap-[14px] px-[26px] py-4 text-[16px] font-work-sans font-normal text-primary
-        ${pathname === link.path ? "bg-tab-container font-semibold" : "bg-none"}
+        ${
+          pathname.split("/")[1] === link.path.split("/")[1]
+            ? "bg-tab-container font-semibold"
+            : "bg-none"
+        }
         `}
             >
               <img src={link.icon} alt="" />

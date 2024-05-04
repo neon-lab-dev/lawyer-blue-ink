@@ -4,16 +4,12 @@ import rightArrow from "../../assets/icons/right-arrow.svg";
 const AppHeader = () => {
   const { pathname } = useLocation();
 
-  const capitalizeFirstLetter = (word: string): string => {
-    return word.charAt(0).toUpperCase() + word.slice(1);
+  const covertToUpperCase = (str: string) => {
+    return str
+      .replace(/-/g, " ")
+      .replace(/\b\w/g, (char) => char.toUpperCase());
   };
 
-  const title = pathname
-    .substring(1)
-    .split("-")
-    .map(capitalizeFirstLetter)
-    .join(" ");
-    
   return (
     <div className="w-full h-[80px] bg-header flex items-center gap-[18px] px-9 py-5">
       <Link
@@ -24,7 +20,7 @@ const AppHeader = () => {
       </Link>
       <img className="w-6 h-6" src={rightArrow} alt="" />
       <h1 className="text-tab-activation font-work-sans text-base font-semibold leading-normal">
-        {title || "Upload Template"}
+        {covertToUpperCase(pathname.split("/")[1] || "Upload Template")}
       </h1>
     </div>
   );

@@ -1,7 +1,7 @@
 import axios from "axios";
 import API from ".";
 
-export const handSendEmail = async (data: {
+export const handleSendEmail = async (data: {
   to: string;
   subject: string;
   cc: string;
@@ -13,7 +13,7 @@ export const handSendEmail = async (data: {
   formData.append("subject", data.subject);
   formData.append("cc", data.cc);
   formData.append("body", data.body);
-  data.attachments.forEach((file) => {
+  data.attachments?.forEach((file) => {
     formData.append("files", file);
   });
 
