@@ -32,7 +32,7 @@ const ExcelSheet = () => {
           Excel Sheet
         </h1>
         {excelData && excelData.length > 0 ? (
-          <div className="overflow-x-auto hide-scrollbar">
+          <div className="overflow-x-auto h-[calc(100vh-300px)] hide-scrollbar bg-black/[0.01] shadow">
             <table className="table-auto border-collapse">
               <thead>
                 <tr className="text-text text-[14px] font-work-sans font-medium">

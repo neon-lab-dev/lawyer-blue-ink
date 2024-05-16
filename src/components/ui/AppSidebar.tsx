@@ -50,7 +50,7 @@ const AppSidebar = () => {
   return (
     <div className="w-[271px] h-full bg-[#FAFAFF]">
       <div className="flex flex-col gap-6 h-full">
-        <div className="flex items-center gap-[10px] bg-headerLeft h-[75px] pl-[26px]">
+        <div className="flex items-center gap-[10px] bg-headerLeft min-h-[76px] pl-[26px]">
           <div className="w-[45px] h-[43px] rounded-xl flex justify-center items-center bg-white">
             <img src={user} alt="UserImg" />
           </div>
