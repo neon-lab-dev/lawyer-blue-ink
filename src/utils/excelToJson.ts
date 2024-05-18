@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import readXlsxFile from "read-excel-file";
 
 const excelToJson = (file: Blob) => {
@@ -22,6 +23,14 @@ const excelToJson = (file: Blob) => {
           return obj;
         });
         const truthyResult = result.filter((item) => Boolean(item));
+
+        if (truthyResult.length < result.length) {
+          toast.error(
+            `${
+              result.length - truthyResult.length
+            } rows are ignored because of missing values in the row!`
+          );
+        }
 
         // convert every value to string according to the requirement
         const finalResult = truthyResult.map((item) => {
