@@ -18,9 +18,10 @@ type Props = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 const Button = React.forwardRef<HTMLButtonElement, Props>(
-  ({ className, variant = "primary", ...props }) => {
+  ({ className, variant = "primary", ...props }, ref) => {
     return (
       <button
+        ref={ref}
         className={twMerge(
           classes.default,
           classes.variants[variant],
