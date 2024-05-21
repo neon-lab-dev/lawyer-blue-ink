@@ -39,7 +39,13 @@ const excelToJson = (file: Blob) => {
             const val = item[key];
             if (val === null || val === undefined) return (obj[key] = "");
             if (typeof val === "object") {
-              obj[key] = val.toString();
+              // if the value is an date, convert it to string like "jan 1, 2020"
+
+              if (val instanceof Date) {
+                obj[key] = val.toDateString();
+              } else {
+                obj[key] = val.toString();
+              }
             } else if (Array.isArray(val)) {
               obj[key] = val.join(",");
             } else {
