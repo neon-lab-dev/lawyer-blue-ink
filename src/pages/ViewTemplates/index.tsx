@@ -10,6 +10,7 @@ import { ITemplate } from "@/types/template.type";
 import toast from "react-hot-toast";
 import { PulseLoader } from "react-spinners";
 import Loading from "@/components/reusable/Loading";
+import downloadIcon from "@/assets/icons/download-svgrepo-com.svg";
 
 const ViewTemplate = () => {
   const queryClient = useQueryClient();
@@ -87,7 +88,7 @@ const ViewTemplate = () => {
                   alt={item.file_name}
                   className="h-[100px] my-auto w-[100px] aspect-square object-contain object-center"
                 />
-                <div className="flex items-center my-auto gap-12">
+                <div className="flex items-center my-auto gap-6">
                   <Button
                     onClick={() => {
                       setIsPreviewOpen(true);
@@ -97,6 +98,19 @@ const ViewTemplate = () => {
                   >
                     View
                   </Button>
+
+                  {/* download btn */}
+                  <a
+                    href={`data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,${item.data}`}
+                    download={`${item.file_name}.docx`}
+                  >
+                    <img
+                      src={downloadIcon}
+                      className="h-6 w-6"
+                      alt="download"
+                    />
+                  </a>
+
                   <button
                     onClick={() => {
                       setDeleteModal({
