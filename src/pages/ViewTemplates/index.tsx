@@ -11,6 +11,9 @@ import toast from "react-hot-toast";
 import { PulseLoader } from "react-spinners";
 import Loading from "@/components/reusable/Loading";
 import downloadIcon from "@/assets/icons/download-svgrepo-com.svg";
+import downloadFile from "@/assets/icons/file-download-svgrepo-com.svg";
+import jsonToXlsx from "@/utils/jstonToXlsx";
+import extractVariablesFromDocx from "@/utils/extractVariablesFromDocx";
 
 const ViewTemplate = () => {
   const queryClient = useQueryClient();
@@ -101,8 +104,9 @@ const ViewTemplate = () => {
 
                   {/* download btn */}
                   <a
+                    title="Download template in .docx format"
                     href={`data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,${item.data}`}
-                    download={`${item.file_name}.docx`}
+                    download={`${item.file_name} template.docx`}
                   >
                     <img
                       src={downloadIcon}
@@ -110,6 +114,23 @@ const ViewTemplate = () => {
                       alt="download"
                     />
                   </a>
+
+                  {/* download file btn */}
+
+                  <button
+                    onClick={async () => {
+                      extractVariablesFromDocx(item.data ?? "").then((vars) => {
+                        jsonToXlsx(vars, item.file_name);
+                      });
+                    }}
+                    title="Download excel file for this template!"
+                  >
+                    <img
+                      src={downloadFile}
+                      className="h-6 w-6"
+                      alt="download"
+                    />
+                  </button>
 
                   <button
                     onClick={() => {
