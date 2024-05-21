@@ -13,6 +13,8 @@ interface FilePreviewProps {
   setTemplateName: (name: string) => void;
   onSaveAndUpload: () => void;
   onBack: () => void;
+  templateSubject: string;
+  setTemplateSubject: (subject: string) => void;
 }
 
 const FilePreview = ({
@@ -21,6 +23,8 @@ const FilePreview = ({
   setTemplateName,
   onSaveAndUpload,
   onBack,
+  templateSubject,
+  setTemplateSubject,
 }: FilePreviewProps) => {
   const [error, setError] = useState<string | null>(null);
 
@@ -87,27 +91,38 @@ const FilePreview = ({
           </div>
           <div className="border-l border-gray-400 px-10">
             <div className="flex flex-col gap-6">
-              <span className="text-lg font-semibold">
-                Set The Template Name
-              </span>
-              <input
-                type="text"
-                value={templateName}
-                placeholder="Enter a File Name"
-                onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                  setTemplateName(e.target.value)
-                }
-                className="w-[360px] h-[16px] border border-gray-800 rounded-lg p-4"
-              />
+              <div className="flex flex-col gap-4">
+                <span className="text-lg font-semibold">Template Name</span>
+                <input
+                  type="text"
+                  value={templateName}
+                  placeholder="Enter a File Name"
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    setTemplateName(e.target.value)
+                  }
+                  className="w-[360px] h-[42px] border border-gray-800 rounded-md p-4"
+                />
+              </div>
+              <div className="flex flex-col gap-4">
+                <span className="text-lg font-semibold">Subject</span>
+                <input
+                  type="text"
+                  value={templateSubject}
+                  placeholder="Enter template subject"
+                  onChange={(e) => setTemplateSubject(e.target.value)}
+                  className="w-[360px] h-[42px] border border-gray-800 rounded-md p-4"
+                />
+              </div>
               <div className="flex justify-end">
                 <Button
-                  disabled={isPending || !templateName}
+                  disabled={isPending || !templateName || !templateSubject}
                   onClick={() => {
                     if (!docFile) toast.error("No document file provided.");
                     else
                       mutate({
                         file: docFile,
                         file_name: templateName,
+                        subject: templateSubject,
                       });
                   }}
                 >

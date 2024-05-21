@@ -17,7 +17,9 @@ import extractVariablesFromDocx from "@/utils/extractVariablesFromDocx";
 
 const ViewTemplate = () => {
   const queryClient = useQueryClient();
-  const [selectedTemplate, setSelectedTemplate] = useState<string>("");
+  const [selectedTemplate, setSelectedTemplate] = useState<ITemplate | null>(
+    null
+  );
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [templates, setTemplates] = useState<ITemplate[]>([]);
 
@@ -50,7 +52,7 @@ const ViewTemplate = () => {
         id: "",
         templateName: "",
       });
-      setSelectedTemplate("");
+      setSelectedTemplate(null);
     },
     onError: (error: string) => {
       toast.error(error);
@@ -95,7 +97,7 @@ const ViewTemplate = () => {
                   <Button
                     onClick={() => {
                       setIsPreviewOpen(true);
-                      setSelectedTemplate(item.data ?? "");
+                      setSelectedTemplate(item);
                     }}
                     variant="supportive"
                   >
@@ -161,8 +163,12 @@ const ViewTemplate = () => {
       >
         <div className="flex flex-col h-[600px] w-[730px] items-center gap-5">
           <span className="text-text text-[20px] font-semibold">Preview</span>
+          <h3 className="text-text text-[16px]">
+            <span className="font-semibold">Subject: </span>
+            {selectedTemplate?.subject}
+          </h3>
           <div className="w-full h-full overflow-x-hidden overflow-y-auto scrollbar-md">
-            <DocxPreview selectedTemplate={selectedTemplate} />
+            <DocxPreview selectedTemplate={selectedTemplate?.data} />
           </div>
         </div>
       </Modal>
@@ -175,7 +181,7 @@ const ViewTemplate = () => {
             id: "",
             templateName: "",
           });
-          setSelectedTemplate("");
+          setSelectedTemplate(null);
         }}
         showCloseButton={true}
       >
@@ -194,7 +200,7 @@ const ViewTemplate = () => {
                   id: "",
                   templateName: "",
                 });
-                setSelectedTemplate("");
+                setSelectedTemplate(null);
               }}
               variant="secondary"
               className="px-3 py-2 min-w-16"
