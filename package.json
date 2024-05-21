@@ -28,7 +28,8 @@
     "react-spinners": "^0.13.8",
     "read-excel-file": "^5.8.0",
     "tailwind-merge": "^2.3.0",
-    "uninstall": "^0.0.0"
+    "uninstall": "^0.0.0",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/node": "^20.12.7",

@@ -10,10 +10,16 @@ import { ITemplate } from "@/types/template.type";
 import toast from "react-hot-toast";
 import { PulseLoader } from "react-spinners";
 import Loading from "@/components/reusable/Loading";
+import downloadIcon from "@/assets/icons/download-svgrepo-com.svg";
+import downloadFile from "@/assets/icons/file-download-svgrepo-com.svg";
+import jsonToXlsx from "@/utils/jstonToXlsx";
+import extractVariablesFromDocx from "@/utils/extractVariablesFromDocx";
 
 const ViewTemplate = () => {
   const queryClient = useQueryClient();
-  const [selectedTemplate, setSelectedTemplate] = useState<string>("");
+  const [selectedTemplate, setSelectedTemplate] = useState<ITemplate | null>(
+    null
+  );
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [templates, setTemplates] = useState<ITemplate[]>([]);
 
@@ -46,7 +52,7 @@ const ViewTemplate = () => {
         id: "",
         templateName: "",
       });
-      setSelectedTemplate("");
+      setSelectedTemplate(null);
     },
     onError: (error: string) => {
       toast.error(error);
@@ -87,16 +93,47 @@ const ViewTemplate = () => {
                   alt={item.file_name}
                   className="h-[100px] my-auto w-[100px] aspect-square object-contain object-center"
                 />
-                <div className="flex items-center my-auto gap-12">
+                <div className="flex items-center my-auto gap-6">
                   <Button
                     onClick={() => {
                       setIsPreviewOpen(true);
-                      setSelectedTemplate(item.data ?? "");
+                      setSelectedTemplate(item);
                     }}
                     variant="supportive"
                   >
                     View
                   </Button>
+
+                  {/* download btn */}
+                  <a
+                    title="Download template in .docx format"
+                    href={`data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,${item.data}`}
+                    download={`${item.file_name} template.docx`}
+                  >
+                    <img
+                      src={downloadIcon}
+                      className="h-6 w-6"
+                      alt="download"
+                    />
+                  </a>
+
+                  {/* download file btn */}
+
+                  <button
+                    onClick={async () => {
+                      extractVariablesFromDocx(item.data ?? "").then((vars) => {
+                        jsonToXlsx(vars, item.file_name);
+                      });
+                    }}
+                    title="Download excel file for this template!"
+                  >
+                    <img
+                      src={downloadFile}
+                      className="h-6 w-6"
+                      alt="download"
+                    />
+                  </button>
+
                   <button
                     onClick={() => {
                       setDeleteModal({
@@ -126,8 +163,12 @@ const ViewTemplate = () => {
       >
         <div className="flex flex-col h-[600px] w-[730px] items-center gap-5">
           <span className="text-text text-[20px] font-semibold">Preview</span>
+          <h3 className="text-text text-[16px]">
+            <span className="font-semibold">Subject: </span>
+            {selectedTemplate?.subject}
+          </h3>
           <div className="w-full h-full overflow-x-hidden overflow-y-auto scrollbar-md">
-            <DocxPreview selectedTemplate={selectedTemplate} />
+            <DocxPreview selectedTemplate={selectedTemplate?.data} />
           </div>
         </div>
       </Modal>
@@ -140,7 +181,7 @@ const ViewTemplate = () => {
             id: "",
             templateName: "",
           });
-          setSelectedTemplate("");
+          setSelectedTemplate(null);
         }}
         showCloseButton={true}
       >
@@ -159,7 +200,7 @@ const ViewTemplate = () => {
                   id: "",
                   templateName: "",
                 });
-                setSelectedTemplate("");
+                setSelectedTemplate(null);
               }}
               variant="secondary"
               className="px-3 py-2 min-w-16"

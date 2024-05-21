@@ -2,7 +2,7 @@ import Button from "@/components/reusable/Button";
 import send from "../../assets/icons/sendwhite.svg";
 import attachFile from "../../assets/icons/attach_file.svg";
 import Modal from "@/components/reusable/Modal";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import DocxWithReplacedText from "./DocxWithReplacedText";
 import { useMutation } from "@tanstack/react-query";
 import { handleSendEmail } from "@/api/email";
@@ -34,8 +34,13 @@ const SendEmailModal = ({
   const [subject, setSubject] = useState("");
   const dispatch = useDispatch();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { attachedFiles, selectedTemplateId, availableTemplates, excelData } =
-    useAppSelector((state) => state.templates);
+  const {
+    attachedFiles,
+    selectedTemplateId,
+    availableTemplates,
+    excelData,
+    templateSubject,
+  } = useAppSelector((state) => state.templates);
 
   const handleAttachFileClick = () => {
     fileInputRef.current?.click();
@@ -51,7 +56,7 @@ const SendEmailModal = ({
     onSuccess: () => {
       setIsSentEmailModalOpen(true);
       setIsModalOpen(false);
-      setSubject("");
+      setSubject(templateSubject);
       handleExcelDataChange("isSent", true);
     },
   });
@@ -91,13 +96,24 @@ const SendEmailModal = ({
     dispatch(setExcelData(newExcelData));
   };
 
+  useEffect(() => {
+    if (templateSubject) {
+      // find placeholder in form of {placeholder} and replace it with the value from dataToSent
+      const replacedSubject = templateSubject.replace(/{[^{}]+}/g, (match) => {
+        const key = match.slice(1, -1);
+        return dataToSent[key];
+      });
+      setSubject(replacedSubject);
+    }
+  }, [templateSubject, dataToSent, isModalOpen, index]);
+
   return (
     <Modal
       showCloseButton={true}
       isOpen={isModalOpen}
       onClose={() => {
         setIsModalOpen(false);
-        setSubject("");
+        setSubject(templateSubject);
       }}
     >
       <div className="w-[977px] rounded p-6 h-[464px] mx-auto overflow-y-auto bg-white flex items-center gap-9 relative">

@@ -5,10 +5,12 @@ import { ITemplate } from "@/types/template.type";
 export const handleUploadTemplate = async (data: {
   file_name: string;
   file: File;
+  subject: string;
 }) => {
   const formData = new FormData();
   formData.append("file_name", data.file_name);
   formData.append("files", data.file);
+  formData.append("subject", data.subject);
 
   return new Promise((resolve, reject) => {
     axios
