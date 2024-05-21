@@ -3,7 +3,10 @@ import article from "@/assets/icons/article.svg";
 import { ITemplate } from "@/types/template.type";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setSelectedTemplateId } from "@/store/slices/templates";
+import {
+  setSelectedTemplateId,
+  setTemplateSubject,
+} from "@/store/slices/templates";
 
 const SelectTemplate = ({
   templates,
@@ -55,6 +58,7 @@ const SelectTemplate = ({
                     onClick={() => {
                       navigate("/send-email/template-selected");
                       dispatch(setSelectedTemplateId(item._id));
+                      dispatch(setTemplateSubject(item.subject));
                     }}
                   >
                     Select

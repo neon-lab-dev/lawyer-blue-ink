@@ -9,6 +9,7 @@ const Home = () => {
   const [showUploadArea, setShowUploadArea] = useState(true);
   const [isFileUploaded, setIsFileUploaded] = useState(false);
   const [templateName, setTemplateName] = useState("");
+  const [templateSubject, setTemplateSubject] = useState("");
 
   const acceptableFileTypes = [
     "application/pdf",
@@ -70,6 +71,8 @@ const Home = () => {
               templateName={templateName}
               setTemplateName={setTemplateName}
               onSaveAndUpload={handleSaveAndUpload}
+              templateSubject={templateSubject}
+              setTemplateSubject={setTemplateSubject}
             />
           ) : (
             <div className="text-red-600">

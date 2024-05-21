@@ -74,11 +74,7 @@ const TrademarkForm = () => {
       }
       try {
         const vars = await extractVariablesFromDocx(selectedTemplate.data);
-        const constantVars = [
-          "CC EMAILS",
-          "CLIENT WHATSAPP NO",
-          "CLIENT EMAIL ID",
-        ];
+        const constantVars = ["CC EMAILS", "CLIENT EMAIL ID"];
         const uniqueVars = [...new Set([...constantVars, ...vars])]; // Remove duplicates
 
         // Check for unsafe characters

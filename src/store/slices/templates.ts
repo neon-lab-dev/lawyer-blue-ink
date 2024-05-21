@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 interface IStore {
   selectedTemplateId: string | null;
+  templateSubject: string;
   availableTemplates: ITemplate[];
   attachedFiles: {
     indexOfExcelSheet: number;
@@ -16,6 +17,7 @@ const initialState: IStore = {
   availableTemplates: [],
   attachedFiles: [],
   excelData: [],
+  templateSubject: "",
 };
 
 export const templateSlice = createSlice({
@@ -70,6 +72,14 @@ export const templateSlice = createSlice({
     clearExcelData: (state) => {
       state.excelData = [];
     },
+    setTemplateSubject: (
+      state,
+      action: {
+        payload: string;
+      }
+    ) => {
+      state.templateSubject = action.payload;
+    },
   },
 });
 
@@ -80,6 +90,7 @@ export const {
   clearAttachedFiles,
   setExcelData,
   clearExcelData,
+  setTemplateSubject,
 } = templateSlice.actions;
 
 export default templateSlice.reducer;
