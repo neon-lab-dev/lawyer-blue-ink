@@ -30,7 +30,7 @@ const SendEmailModal = ({
   setIsSentEmailModalOpen,
   index,
 }: Props): JSX.Element => {
-  const [from, setFrom] = useState("rishiraj1096@gmail.com");
+  const [from, setFrom] = useState("mayank.goel@blueinkk.com");
   const [subject, setSubject] = useState("");
   const dispatch = useDispatch();
   const fileInputRef = useRef<HTMLInputElement>(null);
