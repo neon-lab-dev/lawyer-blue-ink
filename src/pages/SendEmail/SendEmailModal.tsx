@@ -12,6 +12,7 @@ import getReplacedTextFromDocx from "@/utils/getReplacedTextFromDocx";
 import { useAppSelector } from "@/store";
 import { useDispatch } from "react-redux";
 import { setExcelData } from "@/store/slices/templates";
+import { templateFooter } from "@/assets/footer";
 
 type Props = {
   isModalOpen: boolean;
@@ -81,7 +82,7 @@ const SendEmailModal = ({
       to: dataToSent["CLIENT EMAIL ID"],
       cc: dataToSent["CC EMAILS"],
       subject,
-      body,
+      body: `${body}${templateFooter}`,
       attachments: attachedFiles?.find(
         (file) => file.indexOfExcelSheet === index
       )?.files as File[],
@@ -236,6 +237,7 @@ const SendEmailModal = ({
           </h1>
           <DocxWithReplacedText
             data={dataToSent}
+            showFooter={true}
             selectedTemplate={
               availableTemplates.find(
                 (template) => template._id === selectedTemplateId
