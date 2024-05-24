@@ -1,3 +1,4 @@
+import { templateFooter } from "@/assets/footer";
 import replaceWordsInDocx from "@/utils/replaceWordsInDocx";
 import { renderAsync } from "docx-preview";
 import { useEffect, useState } from "react";
@@ -6,12 +7,14 @@ const DocxWithReplacedText = ({
   selectedTemplate,
   data,
   id = "docx-preview-container",
+  showFooter = false,
 }: {
   selectedTemplate: string;
   data: {
     [key: string]: string;
   };
   id?: string;
+  showFooter?: boolean;
 }) => {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -41,11 +44,14 @@ const DocxWithReplacedText = ({
             if (wrapper) {
               wrapper.setAttribute(
                 "style",
-                "background: white;padding: 0;box-shadow: none;"
+                "background: white;padding: 0;box-shadow: none;margin-bottom: 0;"
               );
               const docx = wrapper.querySelector(".docx");
               if (docx) {
-                docx.setAttribute("style", "box-shadow: none;padding: 1rem;");
+                docx.setAttribute(
+                  "style",
+                  "box-shadow: none;padding: 1rem 1rem 0 1rem;"
+                );
               }
             }
           });
@@ -59,6 +65,12 @@ const DocxWithReplacedText = ({
     <div>
       {isLoading && <div>Loading...</div>}
       <div id={id}></div>
+      {showFooter && (
+        <div
+          className="px-4"
+          dangerouslySetInnerHTML={{ __html: templateFooter }}
+        ></div>
+      )}
     </div>
   );
 };
